@@ -1,7 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronDown, User } from "lucide-react";
+import { ChevronDown, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import dooringLogo from "@/assets/dooring-logo.png";
 
 interface DropdownItem {
   label: string;
@@ -15,10 +18,10 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "홈", to: "/" },
+  { label: "홈", to: "/report" },
   { label: "상품 둘러보기", to: "/products" },
   {
-    label: "내 링크",
+    label: "내 활동",
     dropdown: [
       { label: "컨텐츠 관리", to: "/links" },
       { label: "실적 리포트", to: "/report" },
@@ -77,6 +80,7 @@ function DropdownMenu({
 
 export default function TopBar() {
   const location = useLocation();
+  const { logout } = useAuth();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const isActive = (item: NavItem) => {
@@ -89,8 +93,11 @@ export default function TopBar() {
     <header className="h-[45px] border-b border-border bg-background sticky top-0 z-50">
       <div className="h-full max-w-7xl mx-auto px-4 flex items-center justify-between">
         {/* Branding */}
-        <Link to="/" className="font-bold text-base text-foreground tracking-tight">
-          토탈 파트너스
+        <Link to="/report" className="flex items-center gap-2">
+          <img src={dooringLogo} alt="두링파트너스" className="h-6 w-6" />
+          <span className="font-bold text-base text-foreground tracking-tight">
+            두링파트너스
+          </span>
         </Link>
 
         {/* Center Navigation */}
@@ -142,14 +149,16 @@ export default function TopBar() {
           ))}
         </nav>
 
-        {/* Right side - MyPage */}
-        <Link
-          to="#"
-          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        {/* Right side - Logout */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={logout}
+          className="text-sm text-muted-foreground hover:text-foreground gap-1.5"
         >
-          <User className="h-4 w-4" />
-          <span>마이페이지</span>
-        </Link>
+          <LogOut className="h-4 w-4" />
+          <span>로그아웃</span>
+        </Button>
       </div>
     </header>
   );
