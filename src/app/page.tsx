@@ -1,8 +1,12 @@
-import { Link, Navigate } from "react-router-dom";
+'use client';
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import dooringLogo from "@/assets/dooring-logo.png";
 
 const partnerLogos = [
   "PartnerA", "PartnerB", "PartnerC", "PartnerD", "PartnerE",
@@ -10,9 +14,16 @@ const partnerLogos = [
 
 export default function LandingPage() {
   const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace("/report");
+    }
+  }, [isAuthenticated, router]);
 
   if (isAuthenticated) {
-    return <Navigate to="/report" replace />;
+    return null;
   }
 
   return (
@@ -20,11 +31,17 @@ export default function LandingPage() {
       {/* Header */}
       <header className="h-[60px] border-b border-border bg-background sticky top-0 z-50">
         <div className="h-full max-w-6xl mx-auto px-6 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <img src={dooringLogo} alt="두링파트너스" className="h-7 w-7" />
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="/dooring-logo.png"
+              alt="두링파트너스"
+              width={28}
+              height={28}
+              className="h-7 w-7"
+            />
             <span className="font-bold text-base text-foreground">두링파트너스</span>
           </Link>
-          <Link to="/login">
+          <Link href="/login">
             <Button variant="outline" size="sm">
               로그인
             </Button>
@@ -46,7 +63,7 @@ export default function LandingPage() {
             파트너의 성공을 지원합니다
           </p>
           <div className="mt-8">
-            <Link to="/login">
+            <Link href="/login">
               <Button size="lg" className="gap-2 px-8">
                 시작하기
                 <ArrowRight className="h-4 w-4" />

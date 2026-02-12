@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -6,11 +8,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import Layout from "@/components/Layout";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { notices, type Notice } from "@/data/mockData";
 
 const filterTabs = ["전체", "중요", "공지사항", "최신순", "프로모션 및 이벤트", "기타"];
 
-export default function NoticePage() {
+function NoticePageContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("전체");
   const [currentPage, setCurrentPage] = useState(1);
@@ -104,5 +107,13 @@ export default function NoticePage() {
         </Card>
       </div>
     </Layout>
+  );
+}
+
+export default function NoticePage() {
+  return (
+    <ProtectedRoute>
+      <NoticePageContent />
+    </ProtectedRoute>
   );
 }

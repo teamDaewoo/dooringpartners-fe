@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from "react";
 import { Search, MessageCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -5,11 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import Layout from "@/components/Layout";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { qnaItems } from "@/data/mockData";
 
 const tabs = ["FAQ", "1:1 채팅", "문의 이력"];
 
-export default function QnAPage() {
+function QnAPageContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("FAQ");
   const [currentPage, setCurrentPage] = useState(1);
@@ -107,5 +110,13 @@ export default function QnAPage() {
         )}
       </div>
     </Layout>
+  );
+}
+
+export default function QnAPage() {
+  return (
+    <ProtectedRoute>
+      <QnAPageContent />
+    </ProtectedRoute>
   );
 }

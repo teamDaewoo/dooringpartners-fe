@@ -1,10 +1,13 @@
+'use client';
+
 import { useState } from "react";
 import { Image as ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Layout from "@/components/Layout";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { guideSections } from "@/data/mockData";
 
-export default function UsingGuidePage() {
+function UsingGuidePageContent() {
   const [activeSection, setActiveSection] = useState(guideSections[0].id);
   const [activeItem, setActiveItem] = useState(guideSections[0].items[0].id);
 
@@ -80,5 +83,13 @@ export default function UsingGuidePage() {
         </div>
       </div>
     </Layout>
+  );
+}
+
+export default function UsingGuidePage() {
+  return (
+    <ProtectedRoute>
+      <UsingGuidePageContent />
+    </ProtectedRoute>
   );
 }

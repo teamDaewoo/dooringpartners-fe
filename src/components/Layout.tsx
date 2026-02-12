@@ -1,3 +1,5 @@
+'use client';
+
 import TopBar from "./TopBar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {

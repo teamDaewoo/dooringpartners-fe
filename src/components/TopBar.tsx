@@ -1,39 +1,42 @@
+'use client';
+
 import { useState, useRef, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { ChevronDown, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import dooringLogo from "@/assets/dooring-logo.png";
 
 interface DropdownItem {
   label: string;
-  to: string;
+  href: string;
 }
 
 interface NavItem {
   label: string;
-  to?: string;
+  href?: string;
   dropdown?: DropdownItem[];
 }
 
 const navItems: NavItem[] = [
-  { label: "홈", to: "/report" },
-  { label: "상품 둘러보기", to: "/products" },
+  { label: "홈", href: "/report" },
+  { label: "상품 둘러보기", href: "/products" },
   {
     label: "내 활동",
     dropdown: [
-      { label: "컨텐츠 관리", to: "/links" },
-      { label: "실적 리포트", to: "/report" },
-      { label: "정산 관리", to: "/receipt" },
+      { label: "컨텐츠 관리", href: "/links" },
+      { label: "실적 리포트", href: "/report" },
+      { label: "정산 관리", href: "/receipt" },
     ],
   },
   {
     label: "고객지원",
     dropdown: [
-      { label: "공지사항", to: "/notice" },
-      { label: "Q&A", to: "/qna" },
-      { label: "사용가이드", to: "/guide" },
+      { label: "공지사항", href: "/notice" },
+      { label: "Q&A", href: "/qna" },
+      { label: "사용가이드", href: "/guide" },
     ],
   },
 ];
@@ -66,8 +69,8 @@ function DropdownMenu({
     >
       {items.map((item) => (
         <Link
-          key={item.to}
-          to={item.to}
+          key={item.href}
+          href={item.href}
           onClick={onClose}
           className="block px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors"
         >
@@ -79,13 +82,13 @@ function DropdownMenu({
 }
 
 export default function TopBar() {
-  const location = useLocation();
+  const pathname = usePathname();
   const { logout } = useAuth();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const isActive = (item: NavItem) => {
-    if (item.to) return location.pathname === item.to;
-    if (item.dropdown) return item.dropdown.some((d) => location.pathname === d.to);
+    if (item.href) return pathname === item.href;
+    if (item.dropdown) return item.dropdown.some((d) => pathname === d.href);
     return false;
   };
 
@@ -93,8 +96,14 @@ export default function TopBar() {
     <header className="h-[45px] border-b border-border bg-background sticky top-0 z-50">
       <div className="h-full max-w-7xl mx-auto px-4 flex items-center justify-between">
         {/* Branding */}
-        <Link to="/report" className="flex items-center gap-2">
-          <img src={dooringLogo} alt="두링파트너스" className="h-6 w-6" />
+        <Link href="/report" className="flex items-center gap-2">
+          <Image
+            src="/dooring-logo.png"
+            alt="두링파트너스"
+            width={24}
+            height={24}
+            className="h-6 w-6"
+          />
           <span className="font-bold text-base text-foreground tracking-tight">
             두링파트너스
           </span>
@@ -104,9 +113,9 @@ export default function TopBar() {
         <nav className="flex items-center gap-1">
           {navItems.map((item) => (
             <div key={item.label} className="relative">
-              {item.to ? (
+              {item.href ? (
                 <Link
-                  to={item.to}
+                  href={item.href}
                   className={cn(
                     "px-3 py-2 text-sm font-medium transition-colors relative",
                     isActive(item)

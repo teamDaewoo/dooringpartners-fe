@@ -1,24 +1,31 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+'use client';
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
-import dooringLogo from "@/assets/dooring-logo.png";
 
 export default function LoginPage() {
   const { login, isAuthenticated } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Redirect if already logged in
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace("/report");
+    }
+  }, [isAuthenticated, router]);
+
   if (isAuthenticated) {
-    navigate("/report", { replace: true });
     return null;
   }
 
@@ -31,7 +38,7 @@ export default function LoginPage() {
     setLoading(false);
 
     if (result.success) {
-      navigate("/report", { replace: true });
+      router.replace("/report");
     } else {
       setError(result.error || "로그인에 실패했습니다.");
     }
@@ -42,8 +49,14 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex flex-col items-center gap-3">
-            <img src={dooringLogo} alt="두링파트너스" className="h-12 w-12" />
+          <Link href="/" className="inline-flex flex-col items-center gap-3">
+            <Image
+              src="/dooring-logo.png"
+              alt="두링파트너스"
+              width={48}
+              height={48}
+              className="h-12 w-12"
+            />
             <span className="text-xl font-bold text-foreground">두링파트너스</span>
           </Link>
         </div>

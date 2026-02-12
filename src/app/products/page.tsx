@@ -1,4 +1,7 @@
+'use client';
+
 import { useState } from "react";
+import Link from "next/link";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -7,13 +10,14 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import Layout from "@/components/Layout";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { categories, products, type Product } from "@/data/mockData";
 
 function formatKRW(value: number) {
   return `₩${value.toLocaleString("ko-KR")}`;
 }
 
-export default function ProductSearchPage() {
+function ProductSearchPageContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("전체");
   const [includeIssued, setIncludeIssued] = useState(false);
@@ -116,7 +120,7 @@ export default function ProductSearchPage() {
 function ProductCard({ product }: { product: Product }) {
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer group">
-      <a href={`/product/${product.id}`}>
+      <Link href={`/product/${product.id}`}>
         {/* Image placeholder */}
         <div className="aspect-[4/3] bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
           <span className="text-muted-foreground text-xs">상품 이미지</span>
@@ -135,7 +139,15 @@ function ProductCard({ product }: { product: Product }) {
             </span>
           </div>
         </CardContent>
-      </a>
+      </Link>
     </Card>
+  );
+}
+
+export default function ProductSearchPage() {
+  return (
+    <ProtectedRoute>
+      <ProductSearchPageContent />
+    </ProtectedRoute>
   );
 }

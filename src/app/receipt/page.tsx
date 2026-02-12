@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Info, FileText, Mail, DollarSign, Clock, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import KPICard from "@/components/KPICard";
 import Layout from "@/components/Layout";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { receiptKPIs, settlementData, type SettlementStatus } from "@/data/mockData";
 
 function formatKRW(value: number) {
@@ -19,7 +22,7 @@ const statusConfig: Record<SettlementStatus, { variant: "default" | "secondary" 
   "미지급": { variant: "destructive", className: "" },
 };
 
-export default function ReceiptPage() {
+function ReceiptPageContent() {
   const [currentMonth, setCurrentMonth] = useState(new Date(2026, 0));
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -158,5 +161,13 @@ export default function ReceiptPage() {
         </Card>
       </div>
     </Layout>
+  );
+}
+
+export default function ReceiptPage() {
+  return (
+    <ProtectedRoute>
+      <ReceiptPageContent />
+    </ProtectedRoute>
   );
 }

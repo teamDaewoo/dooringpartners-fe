@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from "react";
 import { Search, ArrowUp, ArrowRight, ArrowDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -7,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import Layout from "@/components/Layout";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { linksData, type LinkPlatform, type LinkPriority, type LinkStatus } from "@/data/mockData";
 
 function formatKRW(value: number) {
@@ -33,7 +36,7 @@ const statusColors: Record<LinkStatus, string> = {
   "만료": "bg-muted text-muted-foreground",
 };
 
-export default function LinkManagePage() {
+function LinkManagePageContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -190,5 +193,13 @@ export default function LinkManagePage() {
         </Card>
       </div>
     </Layout>
+  );
+}
+
+export default function LinkManagePage() {
+  return (
+    <ProtectedRoute>
+      <LinkManagePageContent />
+    </ProtectedRoute>
   );
 }

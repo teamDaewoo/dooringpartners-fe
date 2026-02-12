@@ -1,9 +1,13 @@
-import { useParams, Link } from "react-router-dom";
+'use client';
+
+import { useParams } from "next/navigation";
+import Link from "next/link";
 import { ArrowLeft, ChevronRight, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import Layout from "@/components/Layout";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { products } from "@/data/mockData";
 
 function formatKRW(value: number) {
@@ -16,7 +20,7 @@ const commissionHistory = [
   { period: "2025.04 ~ 2025.06", rate: 9, amount: 4748 },
 ];
 
-export default function ProductDetailPage() {
+function ProductDetailPageContent() {
   const { id } = useParams();
   const { toast } = useToast();
   const product = products.find((p) => p.id === Number(id));
@@ -26,7 +30,7 @@ export default function ProductDetailPage() {
       <Layout>
         <div className="max-w-7xl mx-auto px-4 py-16 text-center">
           <p className="text-muted-foreground">상품을 찾을 수 없습니다.</p>
-          <Link to="/products" className="text-accent hover:underline text-sm mt-2 inline-block">
+          <Link href="/products" className="text-accent hover:underline text-sm mt-2 inline-block">
             상품 목록으로 돌아가기
           </Link>
         </div>
@@ -45,7 +49,7 @@ export default function ProductDetailPage() {
     <Layout>
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Breadcrumb */}
-        <Link to="/products" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors">
+        <Link href="/products" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors">
           <ArrowLeft className="h-4 w-4" />
           상품 목록
         </Link>
@@ -106,5 +110,13 @@ export default function ProductDetailPage() {
         </div>
       </div>
     </Layout>
+  );
+}
+
+export default function ProductDetailPage() {
+  return (
+    <ProtectedRoute>
+      <ProductDetailPageContent />
+    </ProtectedRoute>
   );
 }

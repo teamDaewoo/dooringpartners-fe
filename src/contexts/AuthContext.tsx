@@ -1,8 +1,11 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
+'use client';
+
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
   user: { email: string } | null;
+  isLoading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 }
@@ -10,10 +13,22 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<{ email: string } | null>(() => {
+  const [user, setUser] = useState<{ email: string } | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Client-side only: load user from localStorage
     const stored = localStorage.getItem("dooring_user");
-    return stored ? JSON.parse(stored) : null;
-  });
+    if (stored) {
+      try {
+        setUser(JSON.parse(stored));
+      } catch (error) {
+        console.error("Failed to parse user data:", error);
+        localStorage.removeItem("dooring_user");
+      }
+    }
+    setIsLoading(false);
+  }, []);
 
   const login = useCallback(async (email: string, password: string) => {
     // Mock authentication - accept any email with password "1234" or length >= 4
@@ -39,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!user, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated: !!user, user, isLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
