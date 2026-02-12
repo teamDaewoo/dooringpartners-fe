@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/auth/AuthContext";
 
 const partnerLogos = [
   "PartnerA", "PartnerB", "PartnerC", "PartnerD", "PartnerE",

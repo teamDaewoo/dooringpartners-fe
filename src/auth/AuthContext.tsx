@@ -1,19 +1,12 @@
 'use client';
 
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
-
-interface AuthContextType {
-  isAuthenticated: boolean;
-  user: { email: string } | null;
-  isLoading: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  logout: () => void;
-}
+import { AuthContextType, User } from "./types";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<{ email: string } | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
