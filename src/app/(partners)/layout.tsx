@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import TopBar from "@/components/TopBar";
+import TopBar from "@/components/common/TopBar";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function PartnersLayout({ children }: { children: React.ReactNode }) {

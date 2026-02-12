@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import KPICard from "@/components/KPICard";
+import KPICard from "@/components/common/KPICard";
 import { reportKPIs, reportChartData } from "@/data/mockData";
 
 const dateChips = ["오늘", "7일", "30일", "3개월", "6개월", "1년"];

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import KPICard from "@/components/KPICard";
+import KPICard from "@/components/common/KPICard";
 import { receiptKPIs, settlementData, type SettlementStatus } from "@/data/mockData";
 
 function formatKRW(value: number) {
