@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { Image as ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Layout from "@/components/Layout";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import { guideSections } from "@/data/mockData";
 
 function UsingGuidePageContent() {
@@ -23,7 +21,7 @@ function UsingGuidePageContent() {
   };
 
   return (
-    <Layout>
+    <>
       <div className="max-w-7xl mx-auto px-4 py-6">
         <h1 className="text-xl font-bold text-foreground mb-6">사용가이드</h1>
 
@@ -82,14 +80,14 @@ function UsingGuidePageContent() {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
 
 export default function UsingGuidePage() {
   return (
-    <ProtectedRoute>
+    
       <UsingGuidePageContent />
-    </ProtectedRoute>
+    
   );
 }

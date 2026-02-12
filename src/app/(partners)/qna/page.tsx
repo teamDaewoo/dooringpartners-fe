@@ -6,8 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import Layout from "@/components/Layout";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import { qnaItems } from "@/data/mockData";
 
 const tabs = ["FAQ", "1:1 채팅", "문의 이력"];
@@ -27,7 +25,7 @@ function QnAPageContent() {
   const paginated = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
 
   return (
-    <Layout>
+    <>
       <div className="max-w-7xl mx-auto px-4 py-6">
         <h1 className="text-xl font-bold text-foreground mb-4">Q&A</h1>
 
@@ -109,14 +107,14 @@ function QnAPageContent() {
           </div>
         )}
       </div>
-    </Layout>
+    </>
   );
 }
 
 export default function QnAPage() {
   return (
-    <ProtectedRoute>
+    
       <QnAPageContent />
-    </ProtectedRoute>
+    
   );
 }

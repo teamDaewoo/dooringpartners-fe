@@ -8,8 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import KPICard from "@/components/KPICard";
-import Layout from "@/components/Layout";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import { receiptKPIs, settlementData, type SettlementStatus } from "@/data/mockData";
 
 function formatKRW(value: number) {
@@ -51,7 +49,7 @@ function ReceiptPageContent() {
   };
 
   return (
-    <Layout>
+    <>
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Month selector */}
         <div className="flex items-center gap-3 mb-6">
@@ -160,14 +158,14 @@ function ReceiptPageContent() {
           </CardContent>
         </Card>
       </div>
-    </Layout>
+    </>
   );
 }
 
 export default function ReceiptPage() {
   return (
-    <ProtectedRoute>
+    
       <ReceiptPageContent />
-    </ProtectedRoute>
+    
   );
 }

@@ -8,20 +8,16 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import KPICard from "@/components/KPICard";
-import Layout from "@/components/Layout";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import { reportKPIs, reportChartData } from "@/data/mockData";
 
 const dateChips = ["오늘", "7일", "30일", "3개월", "6개월", "1년"];
 
-export default function ReportPage() {
+export default function DashboardPage() {
   const [selectedChip, setSelectedChip] = useState("30일");
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <ProtectedRoute>
-      <Layout>
-        <div className="max-w-7xl mx-auto px-4 py-6">
+    <div className="max-w-7xl mx-auto px-4 py-6">
           {/* Header */}
           <div className="mb-1">
             <h1 className="text-xl font-bold text-foreground">실적 리포트</h1>
@@ -141,8 +137,6 @@ export default function ReportPage() {
               </Tabs>
             </CardContent>
           </Card>
-        </div>
-      </Layout>
-    </ProtectedRoute>
+    </div>
   );
 }

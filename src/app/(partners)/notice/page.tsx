@@ -7,8 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import Layout from "@/components/Layout";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import { notices, type Notice } from "@/data/mockData";
 
 const filterTabs = ["전체", "중요", "공지사항", "최신순", "프로모션 및 이벤트", "기타"];
@@ -30,7 +28,7 @@ function NoticePageContent() {
   const paginated = sorted.slice((currentPage - 1) * perPage, currentPage * perPage);
 
   return (
-    <Layout>
+    <>
       <div className="max-w-7xl mx-auto px-4 py-6">
         <h1 className="text-xl font-bold text-foreground mb-4">공지사항</h1>
 
@@ -106,14 +104,14 @@ function NoticePageContent() {
           </CardContent>
         </Card>
       </div>
-    </Layout>
+    </>
   );
 }
 
 export default function NoticePage() {
   return (
-    <ProtectedRoute>
+    
       <NoticePageContent />
-    </ProtectedRoute>
+    
   );
 }

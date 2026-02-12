@@ -21,13 +21,13 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "홈", href: "/report" },
+  { label: "홈", href: "/dashboard" },
   { label: "상품 둘러보기", href: "/products" },
   {
     label: "내 활동",
     dropdown: [
       { label: "컨텐츠 관리", href: "/links" },
-      { label: "실적 리포트", href: "/report" },
+      { label: "실적 리포트", href: "/dashboard" },
       { label: "정산 관리", href: "/receipt" },
     ],
   },

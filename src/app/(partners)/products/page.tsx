@@ -9,8 +9,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import Layout from "@/components/Layout";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import { categories, products, type Product } from "@/data/mockData";
 
 function formatKRW(value: number) {
@@ -34,7 +32,7 @@ function ProductSearchPageContent() {
   const paginated = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
 
   return (
-    <Layout>
+    <>
       <div className="max-w-7xl mx-auto px-4 py-6">
         <h1 className="text-xl font-bold text-foreground mb-4">상품 둘러보기</h1>
 
@@ -113,7 +111,7 @@ function ProductSearchPageContent() {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
 
@@ -145,9 +143,5 @@ function ProductCard({ product }: { product: Product }) {
 }
 
 export default function ProductSearchPage() {
-  return (
-    <ProtectedRoute>
-      <ProductSearchPageContent />
-    </ProtectedRoute>
-  );
+  return <ProductSearchPageContent />;
 }

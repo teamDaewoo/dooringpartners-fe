@@ -8,8 +8,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import Layout from "@/components/Layout";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import { linksData, type LinkPlatform, type LinkPriority, type LinkStatus } from "@/data/mockData";
 
 function formatKRW(value: number) {
@@ -50,7 +48,7 @@ function LinkManagePageContent() {
   const paginated = filtered.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
   return (
-    <Layout>
+    <>
       {/* Header section */}
       <div className="bg-muted/50 border-b border-border">
         <div className="max-w-7xl mx-auto px-4 py-5">
@@ -192,14 +190,14 @@ function LinkManagePageContent() {
           </CardContent>
         </Card>
       </div>
-    </Layout>
+    </>
   );
 }
 
 export default function LinkManagePage() {
   return (
-    <ProtectedRoute>
+    
       <LinkManagePageContent />
-    </ProtectedRoute>
+    
   );
 }
