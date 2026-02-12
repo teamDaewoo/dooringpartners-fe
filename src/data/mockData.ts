@@ -1,12 +1,42 @@
+// Import types from types folder
+import type { Product, ProductCategory } from "@/types/product";
+import type { LinkRow, LinkPlatform, LinkPriority, LinkStatus } from "@/types/link";
+import type { Notice, NoticeCategory } from "@/types/notice";
+import type { SettlementRow, SettlementStatus, ReceiptKPIs } from "@/types/settlement";
+import type { QnAItem } from "@/types/qna";
+import type { GuideSection } from "@/types/guide";
+import type { DashboardKPIs, ReportKPIs, ChartDataPoint, RecentSale } from "@/types/dashboard";
+
+// Re-export types for backward compatibility
+export type {
+  Product,
+  ProductCategory,
+  LinkRow,
+  LinkPlatform,
+  LinkPriority,
+  LinkStatus,
+  Notice,
+  NoticeCategory,
+  SettlementRow,
+  SettlementStatus,
+  ReceiptKPIs,
+  QnAItem,
+  GuideSection,
+  DashboardKPIs,
+  ReportKPIs,
+  ChartDataPoint,
+  RecentSale,
+};
+
 // Dashboard mock data
-export const dashboardKPIs = {
+export const dashboardKPIs: DashboardKPIs = {
   totalClicks: 12847,
   totalPurchases: 342,
   conversionRate: 2.66,
   commissionRevenue: 1_285_400,
 };
 
-export const chartData = [
+export const chartData: ChartDataPoint[] = [
   { name: "1월", clicks: 1200, purchases: 28, conversionRate: 2.3, revenue: 98000 },
   { name: "2월", clicks: 1800, purchases: 42, conversionRate: 2.3, revenue: 145000 },
   { name: "3월", clicks: 1400, purchases: 35, conversionRate: 2.5, revenue: 112000 },
@@ -16,7 +46,7 @@ export const chartData = [
   { name: "7월", clicks: 1847, purchases: 68, conversionRate: 3.7, revenue: 353400 },
 ];
 
-export const recentSales = [
+export const recentSales: RecentSale[] = [
   { id: 1, name: "김지현", email: "jihyun.kim@email.com", amount: 45000, avatar: "JH" },
   { id: 2, name: "박서준", email: "seojun.park@email.com", amount: 32000, avatar: "SJ" },
   { id: 3, name: "이하은", email: "haeun.lee@email.com", amount: 78000, avatar: "HE" },
@@ -25,14 +55,14 @@ export const recentSales = [
 ];
 
 // Report page mock data
-export const reportKPIs = {
+export const reportKPIs: ReportKPIs = {
   commissionPerUnit: 3_756,
   clicks: 8_421,
   purchases: 215,
   conversionRate: 2.55,
 };
 
-export const reportChartData = [
+export const reportChartData: ChartDataPoint[] = [
   { name: "1주차", conversionRate: 2.1, purchases: 12, clicks: 580 },
   { name: "2주차", conversionRate: 2.8, purchases: 18, clicks: 720 },
   { name: "3주차", conversionRate: 2.4, purchases: 15, clicks: 640 },
@@ -42,24 +72,12 @@ export const reportChartData = [
 ];
 
 // Receipt (Settlement) page mock data
-export const receiptKPIs = {
+export const receiptKPIs: ReceiptKPIs = {
   totalSettlement: 4_285_000,
   pendingSettlement: 1_285_400,
   completedSettlement: 2_999_600,
   expectedNextMonth: 856_000,
 };
-
-export type SettlementStatus = "완료" | "대기" | "미지급";
-
-export interface SettlementRow {
-  id: number;
-  period: string;
-  productName: string;
-  sales: number;
-  commission: number;
-  status: SettlementStatus;
-  date: string;
-}
 
 export const settlementData: SettlementRow[] = [
   { id: 1, period: "2025.12", productName: "프리미엄 스킨케어 세트", sales: 45, commission: 285000, status: "완료", date: "2026-01-15" },
@@ -75,19 +93,7 @@ export const settlementData: SettlementRow[] = [
 ];
 
 // Products mock data
-export interface Product {
-  id: number;
-  name: string;
-  category: string;
-  campaignStart: string;
-  campaignEnd: string;
-  commissionRate: number;
-  commissionAmount: number;
-  price: number;
-  description: string;
-}
-
-export const categories = [
+export const categories: ProductCategory[] = [
   "전체", "패션/의류", "뷰티/화장품", "식품/건강", "전자기기", "생활/주방",
   "스포츠/레저", "도서/문구", "반려동물", "유아/아동", "가구/인테리어",
   "자동차/바이크", "디지털콘텐츠", "여행/숙박", "금융/보험", "교육/강좌",
@@ -106,22 +112,6 @@ export const products: Product[] = [
 ];
 
 // Links management mock data
-export type LinkPlatform = "네이버 블로그" | "유튜브" | "인스타그램" | "틱톡" | "기타";
-export type LinkStatus = "활성" | "만료예정" | "만료";
-export type LinkPriority = "높음" | "보통" | "낮음";
-
-export interface LinkRow {
-  id: number;
-  issuedNumber: string;
-  platform: LinkPlatform;
-  url: string;
-  title: string;
-  expectedIncome: number;
-  expiryDate: string;
-  priority: LinkPriority;
-  status: LinkStatus;
-}
-
 export const linksData: LinkRow[] = [
   { id: 1, issuedNumber: "LNK-001", platform: "네이버 블로그", url: "https://blog.naver.com/example1", title: "프리미엄 스킨케어 세트 리뷰", expectedIncome: 125000, expiryDate: "2026-03-31", priority: "높음", status: "활성" },
   { id: 2, issuedNumber: "LNK-002", platform: "유튜브", url: "https://youtube.com/watch?v=abc123", title: "무선 이어폰 언박싱 영상", expectedIncome: 89000, expiryDate: "2026-04-15", priority: "높음", status: "활성" },
@@ -136,13 +126,6 @@ export const linksData: LinkRow[] = [
 ];
 
 // Notice mock data
-export interface Notice {
-  id: number;
-  title: string;
-  date: string;
-  category: "중요" | "공지사항" | "프로모션 및 이벤트" | "기타";
-}
-
 export const notices: Notice[] = [
   { id: 1, title: "[중요] 2026년 1월 정산 일정 안내", date: "2026-01-20", category: "중요" },
   { id: 2, title: "신규 파트너 가입 이벤트 안내", date: "2026-01-18", category: "프로모션 및 이벤트" },
@@ -157,13 +140,6 @@ export const notices: Notice[] = [
 ];
 
 // QnA mock data
-export interface QnAItem {
-  id: number;
-  question: string;
-  answer: string;
-  category: "FAQ" | "일반";
-}
-
 export const qnaItems: QnAItem[] = [
   { id: 1, question: "커미션은 어떻게 계산되나요?", answer: "커미션은 상품별로 설정된 커미션율에 따라 실제 판매 금액 기준으로 계산됩니다. 상품 상세 페이지에서 각 상품의 커미션율을 확인하실 수 있습니다.", category: "FAQ" },
   { id: 2, question: "정산은 언제 이루어지나요?", answer: "정산은 매월 15일에 전월 실적을 기준으로 진행됩니다. 정산 금액은 정산 관리 페이지에서 확인하실 수 있습니다.", category: "FAQ" },
@@ -176,12 +152,6 @@ export const qnaItems: QnAItem[] = [
 ];
 
 // Guide data
-export interface GuideSection {
-  id: string;
-  title: string;
-  items: { id: string; title: string; content: string }[];
-}
-
 export const guideSections: GuideSection[] = [
   {
     id: "profile",
