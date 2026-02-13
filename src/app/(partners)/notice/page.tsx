@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { notices, type Notice } from "@/data/mockData";
+import type { Notice, NoticeCategory } from "@/types/notice";
+import { notices } from "@/data/mockData";
 
 const filterTabs = ["전체", "중요", "공지사항", "최신순", "프로모션 및 이벤트", "기타"];
 

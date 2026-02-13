@@ -9,7 +9,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { categories, products, type Product } from "@/data/mockData";
+import type { Product, ProductCategory } from "@/types/product";
+import { categories, products } from "@/data/mockData";
 
 function formatKRW(value: number) {
   return `₩${value.toLocaleString("ko-KR")}`;

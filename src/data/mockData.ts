@@ -1,32 +1,11 @@
-// Import types from types folder
+// Import types from types folder (for internal use only)
 import type { Product, ProductCategory } from "@/types/product";
-import type { LinkRow, LinkPlatform, LinkPriority, LinkStatus } from "@/types/link";
-import type { Notice, NoticeCategory } from "@/types/notice";
-import type { SettlementRow, SettlementStatus, ReceiptKPIs } from "@/types/settlement";
+import type { LinkRow } from "@/types/link";
+import type { Notice } from "@/types/notice";
+import type { SettlementRow, ReceiptKPIs } from "@/types/settlement";
 import type { QnAItem } from "@/types/qna";
 import type { GuideSection } from "@/types/guide";
 import type { DashboardKPIs, ReportKPIs, ChartDataPoint, RecentSale } from "@/types/dashboard";
-
-// Re-export types for backward compatibility
-export type {
-  Product,
-  ProductCategory,
-  LinkRow,
-  LinkPlatform,
-  LinkPriority,
-  LinkStatus,
-  Notice,
-  NoticeCategory,
-  SettlementRow,
-  SettlementStatus,
-  ReceiptKPIs,
-  QnAItem,
-  GuideSection,
-  DashboardKPIs,
-  ReportKPIs,
-  ChartDataPoint,
-  RecentSale,
-};
 
 // Dashboard mock data
 export const dashboardKPIs: DashboardKPIs = {

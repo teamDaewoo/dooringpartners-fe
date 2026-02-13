@@ -8,7 +8,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { linksData, type LinkPlatform, type LinkPriority, type LinkStatus } from "@/data/mockData";
+import type { LinkPlatform, LinkPriority, LinkStatus } from "@/types/link";
+import { linksData } from "@/data/mockData";
 
 function formatKRW(value: number) {
   return `₩${value.toLocaleString("ko-KR")}`;

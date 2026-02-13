@@ -8,7 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import KPICard from "@/components/common/KPICard";
-import { receiptKPIs, settlementData, type SettlementStatus } from "@/data/mockData";
+import type { SettlementStatus, ReceiptKPIs } from "@/types/settlement";
+import { receiptKPIs, settlementData } from "@/data/mockData";
 
 function formatKRW(value: number) {
   return `₩${value.toLocaleString("ko-KR")}`;
