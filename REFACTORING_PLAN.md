@@ -16,17 +16,15 @@
 ```
 REFACTORING_PLAN.md          # 이 파일 - 총괄 계획
 ├── docs/refactoring/
-│   ├── phase1-directories.md      # Phase 1: 디렉토리 생성
-│   ├── phase2-pages.md            # Phase 2: 페이지 이동
-│   ├── phase3-components.md       # Phase 3: 컴포넌트 이동
-│   ├── phase4-auth.md             # Phase 4: Auth 구조
-│   ├── phase5-types-data.md       # Phase 5: 타입 및 데이터
-│   ├── phase6-cleanup.md          # Phase 6: 정리
-│   ├── phase7-type-separation.md  # Phase 7: 타입 import 분리 ⭐ NEW
-│   ├── phase8-hook-layer.md       # Phase 8: Hook 계층 분리 ⭐ NEW
-│   ├── phase9-api-layer.md        # Phase 9: API 계층 생성 ⭐ NEW
-│   ├── phase10-react-query.md     # Phase 10: React Query 도입 ⭐ NEW
-│   └── progress.md                # 진행 상황 및 이슈 트래킹
+│   ├── phase1-directories.md        # Phase 1: 디렉토리 생성
+│   ├── phase2-pages.md              # Phase 2: 페이지 이동
+│   ├── phase3-components.md         # Phase 3: 컴포넌트 이동
+│   ├── phase4-auth.md               # Phase 4: Auth 구조
+│   ├── phase5-types-data.md         # Phase 5: 타입 및 데이터
+│   ├── phase6-cleanup.md            # Phase 6: 정리
+│   ├── phase7-type-separation.md    # Phase 7: 타입 import 분리
+│   ├── phase8-react-query-hooks.md  # Phase 8: React Query 기반 Hook 구현
+│   └── progress.md                  # 진행 상황 및 이슈 트래킹
 ```
 
 ---
@@ -69,29 +67,17 @@ REFACTORING_PLAN.md          # 이 파일 - 총괄 계획
 **예상 시간:** 10분
 **위험도:** 🟡 중간 (실수 삭제 위험)
 
-### Phase 7: 타입 Import 분리 ⭐ NEW
+### Phase 7: 타입 Import 분리
 **목표:** 타입과 데이터의 결합 제거, 직접 import 구조 전환
 **파일:** `docs/refactoring/phase7-type-separation.md`
 **예상 시간:** 20-30분
 **위험도:** 🟢 낮음 (타입 경로만 변경)
 
-### Phase 8: Hook 계층 분리 ⭐ NEW
-**목표:** 페이지에서 비즈니스 로직을 Custom Hook으로 추출
-**파일:** `docs/refactoring/phase8-hook-layer.md`
-**예상 시간:** 60-90분
-**위험도:** 🟡 중간 (로직 분리 및 상태 관리)
-
-### Phase 9: API 계층 생성 ⭐ NEW
-**목표:** mockData를 API 함수로 래핑, 비동기 처리 구조 구축
-**파일:** `docs/refactoring/phase9-api-layer.md`
-**예상 시간:** 90-120분
-**위험도:** 🟡 중간 (새로운 계층 추가)
-
-### Phase 10: React Query 도입 ⭐ NEW
-**목표:** React Query로 서버 상태 관리, 캐싱 최적화
-**파일:** `docs/refactoring/phase10-react-query.md`
-**예상 시간:** 90-120분
-**위험도:** 🟡 중간 (새로운 라이브러리 도입)
+### Phase 8: React Query 기반 Hook 구현
+**목표:** React Query + API 계층 + Hook 계층 통합 구현
+**파일:** `docs/refactoring/phase8-react-query-hooks.md`
+**예상 시간:** 180-200분 (3-3.5시간)
+**위험도:** 🟡 중간 (라이브러리 도입 + 계층 분리)
 
 ---
 
@@ -203,22 +189,20 @@ src/
 
 ## 진행 상황 추적
 
-**현재 Phase:** Phase 6 완료 (구조 리팩토링 완료)
-**진행률:** 6/10 (60%)
+**현재 Phase:** Phase 7 완료 (타입 분리 완료)
+**진행률:** 7/8 (87.5%)
 
-**완료된 Phase (Phase 1-6):**
+**완료된 Phase:**
 - ✅ Phase 1: 디렉토리 구조 생성
 - ✅ Phase 2: 페이지 파일 이동
 - ✅ Phase 3: 컴포넌트 파일 이동
 - ✅ Phase 4: Auth 구조 재구성
 - ✅ Phase 5: 타입 및 데이터 구조화
 - ✅ Phase 6: 기존 파일 정리
+- ✅ Phase 7: 타입 Import 분리
 
-**다음 Phase (Phase 7-10):** 계층 분리 및 상태 관리 최적화
-- ⏳ Phase 7: 타입 Import 분리
-- ⏳ Phase 8: Hook 계층 분리
-- ⏳ Phase 9: API 계층 생성
-- ⏳ Phase 10: React Query 도입
+**다음 Phase:**
+- ⏳ Phase 8: React Query 기반 Hook 구현 (API + Hook + React Query 통합)
 
 실시간 진행 상황은 `docs/refactoring/progress.md` 참고
 
@@ -276,7 +260,7 @@ vi docs/refactoring/progress.md
 
 ---
 
-## Phase 7-10 아키텍처 개요
+## Phase 7-8 아키텍처 개요
 
 ### 계층 분리 전략 (3-Layer Architecture)
 
@@ -296,9 +280,8 @@ vi docs/refactoring/progress.md
                       ↓
 ┌─────────────────────────────────────────────────┐
 │  API Layer (api/)                               │
-│  - 서버 통신 담당                                │
-│  - Phase 9: mockData 래핑 (Promise 기반)        │
-│  - Phase 12+: 실제 HTTP 요청으로 전환            │
+│  - mockData 래핑 (Promise 기반)                  │
+│  - 향후: 실제 HTTP 요청으로 전환                  │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -314,33 +297,33 @@ import type { Product } from "@/types/product";
 import { products } from "@/data/mockData";
 ```
 
-**Phase 8: Hook 분리**
+**Phase 8: React Query 기반 Hook 구현**
 ```typescript
-// Before: 페이지에 모든 로직
-const [searchQuery, setSearchQuery] = useState("");
-const filtered = products.filter(...);
+// API 계층 생성
+export async function getProducts() {
+  return mockFetch(mockProducts);
+}
 
-// After: Hook으로 로직 추출
-const { searchQuery, setSearchQuery, filteredProducts } = useProducts();
-```
+// Hook에서 useQuery 사용
+export function useProducts() {
+  const { data: products = [] } = useQuery({
+    queryKey: queryKeys.products.all,
+    queryFn: getProducts,
+  });
 
-**Phase 9: API 계층**
-```typescript
-// Before: 직접 mockData import
-const products = mockProducts;
+  // 비즈니스 로직 (필터링, 페이지네이션)
+  const filtered = useMemo(() =>
+    products.filter(...), [products, filters]
+  );
 
-// After: API 함수 사용
-const products = await getProducts();
-```
+  return { products: filtered, isLoading };
+}
 
-**Phase 10: React Query**
-```typescript
-// Before: useState + useEffect
-const [data, setData] = useState([]);
-useEffect(() => { fetchData(); }, []);
-
-// After: useQuery
-const { data } = useQuery({ queryKey: [...], queryFn: getProducts });
+// 페이지에서 사용
+function ProductsPage() {
+  const { products, isLoading } = useProducts();
+  return <div>{/* UI만 */}</div>;
+}
 ```
 
 ### React Query 도입 이점
@@ -351,18 +334,18 @@ const { data } = useQuery({ queryKey: [...], queryFn: getProducts });
 4. **DevTools**: 캐시 상태 시각화
 5. **성능 최적화**: 중복 요청 제거, Background refetch
 
-### 추후 확장 계획 (Phase 11+)
+### 추후 확장 계획 (Phase 9+)
 
-1. **Phase 11**: UI 컴포넌트 분리
+1. **Phase 9**: UI 컴포넌트 분리
    - 페이지에서 UI 컴포넌트 추출
    - components/dashboard/, components/notice/ 구현
 
-2. **Phase 12**: 실제 API 연동
+2. **Phase 10**: 실제 API 연동
    - API 함수를 실제 HTTP 요청으로 전환
    - 인증 토큰 처리
    - 에러 핸들링 강화
 
-3. **Phase 13**: 성능 최적화
+3. **Phase 11**: 성능 최적화
    - React.memo, useMemo, useCallback
    - Code splitting
    - Image optimization

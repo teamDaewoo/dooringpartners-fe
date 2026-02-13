@@ -1,8 +1,8 @@
 # 리팩토링 진행 상황
 
 **시작일:** 2026-02-12
-**현재 상태:** ✅ Phase 6 완료 (구조 리팩토링 완료)
-**전체 진행률:** 6/10 (60%)
+**현재 상태:** ✅ Phase 7 완료 (타입 분리 완료)
+**전체 진행률:** 7/8 (87.5%)
 
 ---
 
@@ -16,10 +16,8 @@
 | Phase 4: Auth 구조 | ✅ 완료 | 2026-02-12 | 2026-02-12 | - | - |
 | Phase 5: 타입 및 데이터 | ✅ 완료 | 2026-02-12 | 2026-02-12 | - | - |
 | Phase 6: 정리 | ✅ 완료 | 2026-02-12 | 2026-02-12 | - | - |
-| **Phase 7: 타입 분리** | ⏸️ 대기 | - | - | - | - |
-| **Phase 8: Hook 계층** | ⏸️ 대기 | - | - | - | - |
-| **Phase 9: API 계층** | ⏸️ 대기 | - | - | - | - |
-| **Phase 10: React Query** | ⏸️ 대기 | - | - | - | - |
+| **Phase 7: 타입 분리** | ✅ 완료 | 2026-02-13 | 2026-02-13 | ~25분 | - |
+| **Phase 8: React Query + API + Hook 통합** | ⏸️ 대기 | - | - | - | - |
 
 **상태 기호:**
 - ⏸️ 대기 중
@@ -32,7 +30,7 @@
 
 ## 현재 작업 중인 Phase
 
-**Phase 7 준비 중** - 타입 Import 분리
+**Phase 7 완료** - 다음: Phase 8 (React Query + API + Hook 통합)
 
 ---
 
@@ -59,15 +57,9 @@ _이슈 없음_
 _이슈 없음_
 
 #### Phase 7
-_대기 중_
+_이슈 없음_
 
 #### Phase 8
-_대기 중_
-
-#### Phase 9
-_대기 중_
-
-#### Phase 10
 _대기 중_
 
 ---
@@ -104,28 +96,19 @@ _대기 중_
 - [x] 빌드 성공
 - [x] 전체 기능 정상
 
-### Phase 7 체크포인트 (대기)
-- [ ] 모든 페이지에서 타입 직접 import
-- [ ] mockData.ts 타입 re-export 제거
-- [ ] TypeScript 컴파일 성공
-- [ ] 빌드 성공
+### Phase 7 체크포인트
+- [x] 모든 페이지에서 타입 직접 import
+- [x] mockData.ts 타입 re-export 제거
+- [x] TypeScript 컴파일 성공
+- [x] 빌드 성공
 
 ### Phase 8 체크포인트 (대기)
-- [ ] 8개 도메인별 Hook 구현
-- [ ] 페이지에서 비즈니스 로직 제거
-- [ ] 모든 페이지 정상 렌더링
-- [ ] 필터링/페이지네이션 동작 확인
-
-### Phase 9 체크포인트 (대기)
-- [ ] API 함수 전체 구현
-- [ ] Hook에서 API 함수 사용
-- [ ] 비동기 처리 정상 동작
-- [ ] 로딩/에러 UI 표시
-
-### Phase 10 체크포인트 (대기)
 - [ ] React Query 설치 및 설정
 - [ ] Query Key Factory 구현
-- [ ] 모든 Hook을 useQuery로 전환
+- [ ] API 함수 전체 구현 (8개 도메인)
+- [ ] React Query 기반 Hook 구현 (8개 도메인)
+- [ ] 페이지 리팩토링 (Hook 사용)
+- [ ] 비동기 처리 정상 동작
 - [ ] DevTools 동작 확인
 - [ ] 캐싱 동작 확인
 
@@ -184,10 +167,10 @@ _대기 중_
 메시지: refactor(structure): complete phase 6 - clean up old files and folders
 ```
 
-#### Phase 7 (대기)
+#### Phase 7
 ```
-커밋 해시: [대기]
-날짜: [대기]
+커밋 해시: 005ec1c
+날짜: 2026-02-13
 메시지: refactor(structure): complete phase 7 - separate type imports from data
 ```
 
@@ -195,21 +178,7 @@ _대기 중_
 ```
 커밋 해시: [대기]
 날짜: [대기]
-메시지: refactor(structure): complete phase 8 - extract business logic to hooks
-```
-
-#### Phase 9 (대기)
-```
-커밋 해시: [대기]
-날짜: [대기]
-메시지: refactor(structure): complete phase 9 - create API layer
-```
-
-#### Phase 10 (대기)
-```
-커밋 해시: [대기]
-날짜: [대기]
-메시지: refactor(structure): complete phase 10 - introduce React Query
+메시지: refactor(structure): complete phase 8 - integrate React Query with API and Hook layers
 ```
 
 ---
@@ -235,9 +204,9 @@ _대기 중_
 - `src/components/ProtectedRoute.tsx` (Partners Layout으로 대체)
 - `src/app/page.tsx` (중복 라우팅 제거, (marketing)/page.tsx로 통합)
 
-### 추가될 구조 (Phase 7-10)
+### 추가될 구조 (Phase 8)
 - `src/api/` - API 함수 계층
-- `src/hooks/product/`, `src/hooks/dashboard/` 등 - Custom Hooks
+- `src/hooks/product/`, `src/hooks/dashboard/` 등 - React Query 기반 Custom Hooks
 - `src/lib/queryClient.ts` - React Query 설정
 
 ---
@@ -258,58 +227,60 @@ _없음_
 ### 빌드 시간
 - **Phase 1-6 이전:** [측정 예정]
 - **Phase 1-6 이후:** [측정 예정]
-- **Phase 10 이후:** [측정 예정]
+- **Phase 8 이후:** [측정 예정]
 
 ### 번들 크기
 - **Phase 1-6 이전:** [측정 예정]
 - **Phase 1-6 이후:** [측정 예정]
-- **Phase 10 이후:** [측정 예정]
+- **Phase 8 이후:** [측정 예정]
 
 ---
 
-## 다음 작업 (Phase 7-10)
+## 다음 작업 (Phase 7-8)
 
-### Phase 7: 타입 Import 분리
-- [ ] products/page.tsx 타입 import 수정
-- [ ] products/[id]/page.tsx 타입 import 수정
-- [ ] links/page.tsx 타입 import 수정
-- [ ] receipt/page.tsx 타입 import 수정
-- [ ] notice/page.tsx 타입 import 수정
-- [ ] qna/page.tsx 타입 import 수정
-- [ ] guide/page.tsx 타입 import 수정
-- [ ] mockData.ts 타입 re-export 제거
-- [ ] **이 파일(progress.md) 업데이트**
+### Phase 7: 타입 Import 분리 ✅ 완료
+- [x] products/page.tsx 타입 import 수정
+- [x] products/[id]/page.tsx 타입 import 수정 (타입 미사용으로 스킵)
+- [x] links/page.tsx 타입 import 수정
+- [x] receipt/page.tsx 타입 import 수정
+- [x] notice/page.tsx 타입 import 수정
+- [x] qna/page.tsx 타입 import 수정 (타입 미사용으로 스킵)
+- [x] guide/page.tsx 타입 import 수정 (타입 미사용으로 스킵)
+- [x] mockData.ts 타입 re-export 제거
+- [x] **이 파일(progress.md) 업데이트**
 
-### Phase 8: Hook 계층 분리
-- [ ] useProducts, useProduct 구현
-- [ ] useDashboard 구현
-- [ ] useLinks 구현
-- [ ] useSettlement 구현
-- [ ] useNotices 구현
-- [ ] useQnA 구현
-- [ ] useGuide 구현
-- [ ] 모든 페이지 리팩토링
-- [ ] **이 파일(progress.md) 업데이트**
-
-### Phase 9: API 계층 생성
-- [ ] api/client.ts 생성
-- [ ] api/product/ 구현
-- [ ] api/dashboard/ 구현
-- [ ] api/link/ 구현
-- [ ] api/settlement/ 구현
-- [ ] api/notice/ 구현
-- [ ] api/qna/ 구현
-- [ ] api/guide/ 구현
-- [ ] Hook 리팩토링 (API 사용)
-- [ ] **이 파일(progress.md) 업데이트**
-
-### Phase 10: React Query 도입
-- [ ] React Query 라이브러리 설치
-- [ ] QueryClient 설정
-- [ ] Query Key Factory 구현
-- [ ] 모든 Hook을 useQuery로 전환
-- [ ] 페이지 로딩/에러 UI 개선
-- [ ] DevTools 확인
+### Phase 8: React Query + API + Hook 통합
+- [ ] **Step 1: React Query 설치 및 설정**
+  - [ ] 라이브러리 설치 (@tanstack/react-query)
+  - [ ] queryClient.ts 생성
+  - [ ] Root Layout에 Provider 추가
+  - [ ] Query Key Factory 구현
+- [ ] **Step 2: API 계층 구현 (8개 도메인)**
+  - [ ] api/product/ 구현
+  - [ ] api/dashboard/ 구현
+  - [ ] api/link/ 구현
+  - [ ] api/settlement/ 구현
+  - [ ] api/notice/ 구현
+  - [ ] api/qna/ 구현
+  - [ ] api/guide/ 구현
+  - [ ] api/category/ 구현
+- [ ] **Step 3: React Query Hook 구현 (8개 도메인)**
+  - [ ] useProducts, useProduct 구현
+  - [ ] useDashboard 구현
+  - [ ] useLinks 구현
+  - [ ] useSettlement 구현
+  - [ ] useNotices 구현
+  - [ ] useQnA 구현
+  - [ ] useGuide 구현
+  - [ ] useCategories 구현
+- [ ] **Step 4: 페이지 리팩토링 (Hook 사용)**
+  - [ ] products/page.tsx
+  - [ ] dashboard/page.tsx
+  - [ ] links/page.tsx
+  - [ ] receipt/page.tsx
+  - [ ] notice/page.tsx
+  - [ ] qna/page.tsx
+  - [ ] guide/page.tsx
 - [ ] **이 파일(progress.md) 업데이트**
 
 ---
@@ -332,10 +303,17 @@ _없음_
 ## 업데이트 로그
 
 ### 2026-02-13
-- Phase 7-10 계획 수립 완료
+- Phase 7-8 계획 수립 완료 (Phase 8-9-10 통합)
 - 각 Phase 상세 문서 작성
 - progress.md 최신화
 - REFACTORING_PLAN.md 업데이트
+- **Phase 7 완료**: 타입 Import 분리 (~25분)
+  - 4개 페이지 타입 import 경로 수정
+  - mockData.ts 타입 re-export 제거
+  - 빌드 성공 확인
+- **전략 변경**: React Query를 먼저 도입하여 작업량 40% 단축 (6시간 → 3시간)
+  - Phase 8-9-10을 Phase 8로 통합
+  - API + Hook + React Query 동시 구현
 
 ### 2026-02-12
 - Phase 1-6 완료
