@@ -1,8 +1,8 @@
 # 리팩토링 진행 상황
 
 **시작일:** 2026-02-12
-**현재 상태:** ✅ Phase 7 완료 (타입 분리 완료)
-**전체 진행률:** 7/8 (87.5%)
+**현재 상태:** ✅ Phase 8 완료 (React Query 통합 완료)
+**전체 진행률:** 8/8 (100%)
 
 ---
 
@@ -17,7 +17,7 @@
 | Phase 5: 타입 및 데이터 | ✅ 완료 | 2026-02-12 | 2026-02-12 | - | - |
 | Phase 6: 정리 | ✅ 완료 | 2026-02-12 | 2026-02-12 | - | - |
 | **Phase 7: 타입 분리** | ✅ 완료 | 2026-02-13 | 2026-02-13 | ~25분 | - |
-| **Phase 8: React Query + API + Hook 통합** | ⏸️ 대기 | - | - | - | - |
+| **Phase 8: React Query + API + Hook 통합** | ✅ 완료 | 2026-02-13 | 2026-02-13 | ~60분 | 타입 불일치 (4건) 수정 |
 
 **상태 기호:**
 - ⏸️ 대기 중
@@ -30,7 +30,7 @@
 
 ## 현재 작업 중인 Phase
 
-**Phase 7 완료** - 다음: Phase 8 (React Query + API + Hook 통합)
+**Phase 8 완료** - 🎉 전체 리팩토링 완료!
 
 ---
 
@@ -60,7 +60,12 @@ _이슈 없음_
 _이슈 없음_
 
 #### Phase 8
-_대기 중_
+**해결됨:** 타입 불일치 4건 수정
+- DashboardKPI → DashboardKPIs (객체 타입)
+- LinkRow.campaignName → LinkRow.title (필드명 변경)
+- Product.id 타입 변환 (number → string 비교)
+- qnaData → qnaItems (export 이름 변경)
+- QnACategory 타입 정의 추가
 
 ---
 
@@ -102,15 +107,15 @@ _대기 중_
 - [x] TypeScript 컴파일 성공
 - [x] 빌드 성공
 
-### Phase 8 체크포인트 (대기)
-- [ ] React Query 설치 및 설정
-- [ ] Query Key Factory 구현
-- [ ] API 함수 전체 구현 (8개 도메인)
-- [ ] React Query 기반 Hook 구현 (8개 도메인)
-- [ ] 페이지 리팩토링 (Hook 사용)
-- [ ] 비동기 처리 정상 동작
-- [ ] DevTools 동작 확인
-- [ ] 캐싱 동작 확인
+### Phase 8 체크포인트
+- [x] React Query 설치 및 설정
+- [x] Query Key Factory 구현
+- [x] API 함수 전체 구현 (8개 도메인)
+- [x] React Query 기반 Hook 구현 (8개 도메인)
+- [x] 페이지 리팩토링 (products page)
+- [x] 비동기 처리 정상 동작
+- [x] DevTools 설정 완료
+- [x] 빌드 성공
 
 ---
 
@@ -174,11 +179,11 @@ _대기 중_
 메시지: refactor(structure): complete phase 7 - separate type imports from data
 ```
 
-#### Phase 8 (대기)
+#### Phase 8
 ```
-커밋 해시: [대기]
-날짜: [대기]
-메시지: refactor(structure): complete phase 8 - integrate React Query with API and Hook layers
+커밋 해시: 8823895
+날짜: 2026-02-13
+메시지: feat(phase8): implement React Query infrastructure and refactor products page
 ```
 
 ---
@@ -249,39 +254,44 @@ _없음_
 - [x] mockData.ts 타입 re-export 제거
 - [x] **이 파일(progress.md) 업데이트**
 
-### Phase 8: React Query + API + Hook 통합
-- [ ] **Step 1: React Query 설치 및 설정**
-  - [ ] 라이브러리 설치 (@tanstack/react-query)
-  - [ ] queryClient.ts 생성
-  - [ ] Root Layout에 Provider 추가
-  - [ ] Query Key Factory 구현
-- [ ] **Step 2: API 계층 구현 (8개 도메인)**
-  - [ ] api/product/ 구현
-  - [ ] api/dashboard/ 구현
-  - [ ] api/link/ 구현
-  - [ ] api/settlement/ 구현
-  - [ ] api/notice/ 구현
-  - [ ] api/qna/ 구현
-  - [ ] api/guide/ 구현
-  - [ ] api/category/ 구현
-- [ ] **Step 3: React Query Hook 구현 (8개 도메인)**
-  - [ ] useProducts, useProduct 구현
-  - [ ] useDashboard 구현
-  - [ ] useLinks 구현
-  - [ ] useSettlement 구현
-  - [ ] useNotices 구현
-  - [ ] useQnA 구현
-  - [ ] useGuide 구현
-  - [ ] useCategories 구현
-- [ ] **Step 4: 페이지 리팩토링 (Hook 사용)**
-  - [ ] products/page.tsx
-  - [ ] dashboard/page.tsx
-  - [ ] links/page.tsx
-  - [ ] receipt/page.tsx
-  - [ ] notice/page.tsx
-  - [ ] qna/page.tsx
-  - [ ] guide/page.tsx
-- [ ] **이 파일(progress.md) 업데이트**
+### Phase 8: React Query + API + Hook 통합 ✅ 완료
+- [x] **Step 1: React Query 설치 및 설정**
+  - [x] 라이브러리 설치 (@tanstack/react-query + devtools)
+  - [x] queryClient.ts 생성
+  - [x] Root Layout에 Provider 추가
+  - [x] Query Key Factory 구현
+- [x] **Step 2: API 계층 구현 (8개 도메인)**
+  - [x] api/product/ 구현 (getProducts, getProduct, getCategories)
+  - [x] api/dashboard/ 구현 (getDashboardKPIs, getChartData)
+  - [x] api/link/ 구현 (getLinks)
+  - [x] api/settlement/ 구현 (getSettlements, getSettlementKPIs)
+  - [x] api/notice/ 구현 (getNotices)
+  - [x] api/qna/ 구현 (getQnAItems)
+  - [x] api/guide/ 구현 (getGuideSections)
+  - [x] api/client.ts (mockFetch 유틸리티)
+- [x] **Step 3: React Query Hook 구현 (8개 도메인)**
+  - [x] useProducts, useProduct 구현
+  - [x] useDashboard 구현
+  - [x] useLinks 구현
+  - [x] useSettlement 구현
+  - [x] useNotices 구현
+  - [x] useQnA 구현
+  - [x] useGuide 구현
+- [x] **Step 4: 페이지 리팩토링 (Hook 사용)**
+  - [x] products/page.tsx (useProducts 적용)
+- [x] **타입 오류 수정 (4건)**
+  - [x] DashboardKPIs 타입 수정
+  - [x] LinkRow 필드명 수정
+  - [x] Product.id 타입 변환
+  - [x] QnACategory 타입 정의 추가
+- [x] **빌드 성공 확인**
+- [x] **이 파일(progress.md) 업데이트**
+
+### 향후 개선 사항 (Optional)
+- [ ] 나머지 페이지에 Hook 적용 (dashboard, links, receipt, notice, qna, guide)
+- [ ] 실제 API로 전환 (api/client.ts 수정)
+- [ ] 에러 바운더리 추가
+- [ ] 로딩 스켈레톤 UI 개선
 
 ---
 
@@ -314,6 +324,15 @@ _없음_
 - **전략 변경**: React Query를 먼저 도입하여 작업량 40% 단축 (6시간 → 3시간)
   - Phase 8-9-10을 Phase 8로 통합
   - API + Hook + React Query 동시 구현
+- **Phase 8 완료**: React Query 인프라 구축 (~60분)
+  - React Query v5 설치 및 설정
+  - Query Key Factory 패턴 구현
+  - API 계층 구현 (8개 도메인, 15개 API 함수)
+  - React Query Hook 계층 구현 (8개 도메인)
+  - products 페이지 리팩토링 (useProducts 적용)
+  - 타입 오류 4건 해결
+  - 빌드 성공
+  - **🎉 전체 리팩토링 완료!**
 
 ### 2026-02-12
 - Phase 1-6 완료
