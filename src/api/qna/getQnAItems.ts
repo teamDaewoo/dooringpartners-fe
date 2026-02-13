@@ -1,5 +1,5 @@
 import { mockFetch } from "../client";
-import { qnaItems as mockQnAData } from "@/data/mockData";
+import { qnaItems as mockQnAData } from "@/api/mocks";
 import type { QnAItem, QnACategory } from "@/types/qna";
 
 export interface GetQnAItemsParams {

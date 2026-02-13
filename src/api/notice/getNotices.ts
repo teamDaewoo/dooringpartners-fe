@@ -1,5 +1,5 @@
 import { mockFetch } from "../client";
-import { notices as mockNotices } from "@/data/mockData";
+import { notices as mockNotices } from "@/api/mocks";
 import type { Notice, NoticeCategory } from "@/types/notice";
 
 export interface GetNoticesParams {

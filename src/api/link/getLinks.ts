@@ -1,5 +1,5 @@
 import { mockFetch } from "../client";
-import { linksData as mockLinksData } from "@/data/mockData";
+import { linksData as mockLinksData } from "@/api/mocks";
 import type { LinkRow, LinkPlatform, LinkStatus, LinkPriority } from "@/types/link";
 
 export interface GetLinksParams {

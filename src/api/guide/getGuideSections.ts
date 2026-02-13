@@ -1,5 +1,5 @@
 import { mockFetch } from "../client";
-import { guideSections as mockGuideSections } from "@/data/mockData";
+import { guideSections as mockGuideSections } from "@/api/mocks";
 import type { GuideSection } from "@/types/guide";
 
 /**

@@ -1,5 +1,5 @@
 import { mockFetch } from "../client";
-import { settlementData as mockSettlementData } from "@/data/mockData";
+import { settlementData as mockSettlementData } from "@/api/mocks";
 import type { SettlementRow, SettlementStatus } from "@/types/settlement";
 
 export interface GetSettlementsParams {

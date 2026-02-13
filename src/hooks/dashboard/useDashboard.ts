@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "@/api/queryKeys";
 import { getDashboardKPIs } from "@/api/dashboard/getDashboardKPIs";
 import { getChartData } from "@/api/dashboard/getChartData";
+import type { ReportKPIs } from "@/types/dashboard";
 
 /**
  * 대시보드 데이터 관리 Hook
@@ -18,7 +19,7 @@ export function useDashboard() {
     data: kpis,
     isLoading: isLoadingKPIs,
     error: kpisError,
-  } = useQuery({
+  } = useQuery<ReportKPIs>({
     queryKey: queryKeys.dashboard.kpis(),
     queryFn: getDashboardKPIs,
     staleTime: 1000 * 60 * 5, // 5분

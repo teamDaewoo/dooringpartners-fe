@@ -1,5 +1,5 @@
 import { mockFetch } from "../client";
-import { chartData as mockChartData } from "@/data/mockData";
+import { chartData as mockChartData } from "@/api/mocks";
 import type { ChartDataPoint } from "@/types/dashboard";
 
 /**

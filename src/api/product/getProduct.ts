@@ -1,5 +1,5 @@
 import { mockFetch } from "../client";
-import { products as mockProducts } from "@/data/mockData";
+import { products as mockProducts } from "@/api/mocks";
 import type { Product } from "@/types/product";
 
 /**

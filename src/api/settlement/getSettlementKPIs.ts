@@ -1,5 +1,5 @@
 import { mockFetch } from "../client";
-import { receiptKPIs as mockReceiptKPIs } from "@/data/mockData";
+import { receiptKPIs as mockReceiptKPIs } from "@/api/mocks";
 import type { ReceiptKPIs } from "@/types/settlement";
 
 /**
