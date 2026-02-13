@@ -8,8 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import KPICard from "@/components/common/KPICard";
-import type { SettlementStatus, ReceiptKPIs } from "@/types/settlement";
-import { receiptKPIs, settlementData } from "@/data/mockData";
+import type { SettlementStatus } from "@/types/settlement";
+import { useSettlement } from "@/hooks/settlement/useSettlement";
 
 function formatKRW(value: number) {
   return `₩${value.toLocaleString("ko-KR")}`;
@@ -24,16 +24,22 @@ const statusConfig: Record<SettlementStatus, { variant: "default" | "secondary" 
 function ReceiptPageContent() {
   const [currentMonth, setCurrentMonth] = useState(new Date(2026, 0));
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 5;
+
+  // React Query Hook 사용
+  const {
+    kpis,
+    settlements,
+    total,
+    isLoading,
+    currentPage,
+    totalPages,
+    setCurrentPage,
+  } = useSettlement({ perPage: 5 });
 
   const monthStr = `${currentMonth.getFullYear()}년 ${currentMonth.getMonth() + 1}월`;
 
   const prevMonth = () => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
   const nextMonth = () => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
-
-  const totalPages = Math.ceil(settlementData.length / rowsPerPage);
-  const paginatedData = settlementData.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
   const toggleRow = (id: number) => {
     setSelectedRows((prev) =>
@@ -42,10 +48,10 @@ function ReceiptPageContent() {
   };
 
   const toggleAll = () => {
-    if (selectedRows.length === paginatedData.length) {
+    if (selectedRows.length === settlements.length) {
       setSelectedRows([]);
     } else {
-      setSelectedRows(paginatedData.map((r) => r.id));
+      setSelectedRows(settlements.map((r) => r.id));
     }
   };
 
@@ -64,12 +70,24 @@ function ReceiptPageContent() {
         </div>
 
         {/* KPI Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <KPICard title="총 정산 금액" value={formatKRW(receiptKPIs.totalSettlement)} icon={<DollarSign className="h-4 w-4" />} />
-          <KPICard title="대기 중 정산" value={formatKRW(receiptKPIs.pendingSettlement)} icon={<Clock className="h-4 w-4" />} />
-          <KPICard title="완료된 정산" value={formatKRW(receiptKPIs.completedSettlement)} icon={<CheckCircle className="h-4 w-4" />} />
-          <KPICard title="다음달 예상" value={formatKRW(receiptKPIs.expectedNextMonth)} icon={<AlertCircle className="h-4 w-4" />} />
-        </div>
+        {isLoading || !kpis ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            {[...Array(4)].map((_, i) => (
+              <Card key={i}>
+                <CardContent className="p-4">
+                  <div className="h-20 animate-pulse bg-muted rounded" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <KPICard title="총 정산 금액" value={formatKRW(kpis.totalSettlement)} icon={<DollarSign className="h-4 w-4" />} />
+            <KPICard title="대기 중 정산" value={formatKRW(kpis.pendingSettlement)} icon={<Clock className="h-4 w-4" />} />
+            <KPICard title="완료된 정산" value={formatKRW(kpis.completedSettlement)} icon={<CheckCircle className="h-4 w-4" />} />
+            <KPICard title="다음달 예상" value={formatKRW(kpis.expectedNextMonth)} icon={<AlertCircle className="h-4 w-4" />} />
+          </div>
+        )}
 
         {/* Info box */}
         <div className="flex items-start gap-3 p-4 bg-info/10 rounded-lg border border-info/20 mb-6">
@@ -99,7 +117,7 @@ function ReceiptPageContent() {
                 <thead>
                   <tr className="border-b border-border bg-muted/50">
                     <th className="p-3 w-10">
-                      <Checkbox checked={selectedRows.length === paginatedData.length && paginatedData.length > 0} onCheckedChange={toggleAll} />
+                      <Checkbox checked={selectedRows.length === settlements.length && settlements.length > 0} onCheckedChange={toggleAll} />
                     </th>
                     <th className="p-3 text-left text-xs font-medium text-muted-foreground">기간</th>
                     <th className="p-3 text-left text-xs font-medium text-muted-foreground">상품명</th>
@@ -110,7 +128,20 @@ function ReceiptPageContent() {
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedData.map((row) => (
+                  {isLoading ? (
+                    <tr>
+                      <td colSpan={7} className="p-8 text-center text-sm text-muted-foreground">
+                        로딩 중...
+                      </td>
+                    </tr>
+                  ) : settlements.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="p-8 text-center text-sm text-muted-foreground">
+                        정산 내역이 없습니다.
+                      </td>
+                    </tr>
+                  ) : (
+                    settlements.map((row) => (
                     <tr key={row.id} className="border-b border-border hover:bg-muted/30 transition-colors">
                       <td className="p-3">
                         <Checkbox checked={selectedRows.includes(row.id)} onCheckedChange={() => toggleRow(row.id)} />
@@ -126,7 +157,8 @@ function ReceiptPageContent() {
                       </td>
                       <td className="p-3 text-sm text-muted-foreground">{row.date}</td>
                     </tr>
-                  ))}
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -134,7 +166,7 @@ function ReceiptPageContent() {
             {/* Pagination */}
             <div className="flex items-center justify-between px-4 py-3 border-t border-border">
               <p className="text-xs text-muted-foreground">
-                총 {settlementData.length}건 중 {(currentPage - 1) * rowsPerPage + 1}-{Math.min(currentPage * rowsPerPage, settlementData.length)}건
+                총 {total}건
               </p>
               <div className="flex items-center gap-1">
                 <Button variant="outline" size="sm" className="h-8 text-xs" disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>

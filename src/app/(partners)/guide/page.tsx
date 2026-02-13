@@ -3,22 +3,33 @@
 import { useState } from "react";
 import { Image as ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { guideSections } from "@/data/mockData";
+import { useGuide } from "@/hooks/guide/useGuide";
 
 function UsingGuidePageContent() {
-  const [activeSection, setActiveSection] = useState(guideSections[0].id);
-  const [activeItem, setActiveItem] = useState(guideSections[0].items[0].id);
+  // React Query Hook 사용
+  const { sections, isLoading } = useGuide();
 
-  const currentSection = guideSections.find((s) => s.id === activeSection);
+  const [activeSection, setActiveSection] = useState(sections[0]?.id || "");
+  const [activeItem, setActiveItem] = useState(sections[0]?.items[0]?.id || "");
+
+  const currentSection = sections.find((s) => s.id === activeSection);
   const currentItem = currentSection?.items.find((i) => i.id === activeItem);
 
   const handleSectionClick = (sectionId: string) => {
     setActiveSection(sectionId);
-    const section = guideSections.find((s) => s.id === sectionId);
+    const section = sections.find((s) => s.id === sectionId);
     if (section && section.items.length > 0) {
       setActiveItem(section.items[0].id);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="text-center py-12 text-muted-foreground text-sm">로딩 중...</div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -29,7 +40,7 @@ function UsingGuidePageContent() {
           {/* Left sidebar */}
           <nav className="w-56 shrink-0 sticky top-[60px] self-start">
             <div className="space-y-1">
-              {guideSections.map((section) => (
+              {sections.map((section) => (
                 <div key={section.id}>
                   <button
                     onClick={() => handleSectionClick(section.id)}

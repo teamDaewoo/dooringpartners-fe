@@ -6,23 +6,21 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { qnaItems } from "@/data/mockData";
+import { useQnA } from "@/hooks/qna/useQnA";
 
 const tabs = ["FAQ", "1:1 채팅", "문의 이력"];
 
 function QnAPageContent() {
-  const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("FAQ");
-  const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 5;
 
-  const filtered = qnaItems.filter((q) =>
-    q.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    q.answer.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
-  const paginated = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
+  // React Query Hook 사용
+  const {
+    items,
+    total,
+    isLoading,
+    searchQuery,
+    setSearchQuery,
+  } = useQnA();
 
   return (
     <>
@@ -35,7 +33,7 @@ function QnAPageContent() {
           <Input
             placeholder="자주 묻는 질문 검색..."
             value={searchQuery}
-            onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9 text-sm"
           />
         </div>
@@ -58,8 +56,13 @@ function QnAPageContent() {
 
         {activeTab === "FAQ" && (
           <>
+            {isLoading ? (
+              <div className="text-center py-12 text-muted-foreground text-sm">로딩 중...</div>
+            ) : items.length === 0 ? (
+              <div className="text-center py-12 text-muted-foreground text-sm">검색 결과가 없습니다.</div>
+            ) : (
             <Accordion type="single" collapsible className="space-y-2">
-              {paginated.map((item) => (
+              {items.map((item) => (
                 <AccordionItem key={item.id} value={`q-${item.id}`} className="border rounded-lg px-4">
                   <AccordionTrigger className="text-sm font-medium hover:no-underline py-4">
                     <div className="flex items-center gap-3">
@@ -75,21 +78,6 @@ function QnAPageContent() {
                 </AccordionItem>
               ))}
             </Accordion>
-
-            {filtered.length === 0 && (
-              <div className="text-center py-12 text-muted-foreground text-sm">검색 결과가 없습니다.</div>
-            )}
-
-            {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-1 mt-6">
-                <Button variant="outline" size="sm" className="h-8 text-xs" disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>이전</Button>
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <Button key={i + 1} variant={currentPage === i + 1 ? "default" : "outline"} size="sm" className="h-8 w-8 text-xs" onClick={() => setCurrentPage(i + 1)}>
-                    {i + 1}
-                  </Button>
-                ))}
-                <Button variant="outline" size="sm" className="h-8 text-xs" disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>다음</Button>
-              </div>
             )}
           </>
         )}

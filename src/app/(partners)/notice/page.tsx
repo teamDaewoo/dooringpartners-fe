@@ -1,32 +1,29 @@
 'use client';
 
-import { useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import type { Notice, NoticeCategory } from "@/types/notice";
-import { notices } from "@/data/mockData";
+import { useNotices } from "@/hooks/notice/useNotices";
 
 const filterTabs = ["전체", "중요", "공지사항", "최신순", "프로모션 및 이벤트", "기타"];
 
 function NoticePageContent() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState("전체");
-  const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 7;
-
-  const filtered = notices.filter((n) => {
-    const matchSearch = n.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchTab = activeTab === "전체" || activeTab === "최신순" || n.category === activeTab;
-    return matchSearch && matchTab;
-  });
-
-  const sorted = activeTab === "최신순" ? [...filtered].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) : filtered;
-  const totalPages = Math.max(1, Math.ceil(sorted.length / perPage));
-  const paginated = sorted.slice((currentPage - 1) * perPage, currentPage * perPage);
+  // React Query Hook 사용
+  const {
+    notices,
+    total,
+    isLoading,
+    activeTab,
+    searchQuery,
+    currentPage,
+    totalPages,
+    setActiveTab,
+    setSearchQuery,
+    setCurrentPage,
+  } = useNotices({ perPage: 7 });
 
   return (
     <>
@@ -39,7 +36,7 @@ function NoticePageContent() {
           <Input
             placeholder="공지사항 검색..."
             value={searchQuery}
-            onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9 text-sm"
           />
         </div>
@@ -51,7 +48,7 @@ function NoticePageContent() {
               key={tab}
               size="sm"
               variant={activeTab === tab ? "default" : "outline"}
-              onClick={() => { setActiveTab(tab); setCurrentPage(1); }}
+              onClick={() => setActiveTab(tab as any)}
               className="text-xs h-8"
             >
               {tab}
@@ -71,7 +68,20 @@ function NoticePageContent() {
                 </tr>
               </thead>
               <tbody>
-                {paginated.map((notice) => (
+                {isLoading ? (
+                  <tr>
+                    <td colSpan={3} className="p-8 text-center text-sm text-muted-foreground">
+                      로딩 중...
+                    </td>
+                  </tr>
+                ) : notices.length === 0 ? (
+                  <tr>
+                    <td colSpan={3} className="p-8 text-center text-sm text-muted-foreground">
+                      검색 결과가 없습니다.
+                    </td>
+                  </tr>
+                ) : (
+                  notices.map((notice) => (
                   <tr key={notice.id} className="border-b border-border hover:bg-muted/30 transition-colors cursor-pointer">
                     <td className="p-3 text-sm text-muted-foreground">{notice.id}</td>
                     <td className="p-3 text-sm font-medium">
@@ -82,13 +92,11 @@ function NoticePageContent() {
                     </td>
                     <td className="p-3 text-sm text-muted-foreground text-right">{notice.date}</td>
                   </tr>
-                ))}
+                  ))
+                )}
               </tbody>
             </table>
 
-            {paginated.length === 0 && (
-              <div className="text-center py-12 text-muted-foreground text-sm">검색 결과가 없습니다.</div>
-            )}
 
             {/* Pagination */}
             {totalPages > 1 && (

@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from "react";
 import { Search, ArrowUp, ArrowRight, ArrowDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import type { LinkPlatform, LinkPriority, LinkStatus } from "@/types/link";
-import { linksData } from "@/data/mockData";
+import { useLinks } from "@/hooks/link/useLinks";
 
 function formatKRW(value: number) {
   return `₩${value.toLocaleString("ko-KR")}`;
@@ -36,17 +35,18 @@ const statusColors: Record<LinkStatus, string> = {
 };
 
 function LinkManagePageContent() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  const filtered = linksData.filter((l) =>
-    l.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    l.issuedNumber.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / rowsPerPage));
-  const paginated = filtered.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
+  // React Query Hook 사용
+  const {
+    links,
+    total,
+    isLoading,
+    searchQuery,
+    currentPage,
+    totalPages,
+    perPage,
+    setSearchQuery,
+    setCurrentPage,
+  } = useLinks({ perPage: 10 });
 
   return (
     <>
@@ -68,7 +68,7 @@ function LinkManagePageContent() {
             <Input
               placeholder="링크 또는 제목 검색..."
               value={searchQuery}
-              onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9 text-sm"
             />
           </div>
@@ -119,7 +119,20 @@ function LinkManagePageContent() {
                   </tr>
                 </thead>
                 <tbody>
-                  {paginated.map((row) => {
+                  {isLoading ? (
+                    <tr>
+                      <td colSpan={7} className="p-8 text-center text-sm text-muted-foreground">
+                        로딩 중...
+                      </td>
+                    </tr>
+                  ) : links.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="p-8 text-center text-sm text-muted-foreground">
+                        검색 결과가 없습니다.
+                      </td>
+                    </tr>
+                  ) : (
+                    links.map((row) => {
                     const PriorityIcon = priorityConfig[row.priority].icon;
                     return (
                       <tr key={row.id} className="border-b border-border hover:bg-muted/30 transition-colors">
@@ -148,7 +161,8 @@ function LinkManagePageContent() {
                         </td>
                       </tr>
                     );
-                  })}
+                  })
+                  )}
                 </tbody>
               </table>
             </div>
@@ -157,7 +171,7 @@ function LinkManagePageContent() {
             <div className="flex items-center justify-between px-4 py-3 border-t border-border">
               <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground">페이지당</span>
-                <Select value={String(rowsPerPage)} onValueChange={(v) => { setRowsPerPage(Number(v)); setCurrentPage(1); }}>
+                <Select value={String(perPage)} disabled>
                   <SelectTrigger className="w-[70px] h-8 text-xs">
                     <SelectValue />
                   </SelectTrigger>

@@ -8,13 +8,17 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import KPICard from "@/components/common/KPICard";
-import { reportKPIs, reportChartData } from "@/data/mockData";
+import { useDashboard } from "@/hooks/dashboard/useDashboard";
+import { reportKPIs } from "@/data/mockData";
 
 const dateChips = ["오늘", "7일", "30일", "3개월", "6개월", "1년"];
 
 export default function DashboardPage() {
   const [selectedChip, setSelectedChip] = useState("30일");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // React Query Hook 사용 (차트 데이터만)
+  const { chartData, isLoading } = useDashboard();
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
@@ -102,8 +106,13 @@ export default function DashboardPage() {
                   <TabsTrigger value="clicks" className="text-xs">클릭수</TabsTrigger>
                 </TabsList>
                 <TabsContent value="conversion">
+                  {isLoading ? (
+                    <div className="h-[300px] flex items-center justify-center text-muted-foreground text-sm">
+                      로딩 중...
+                    </div>
+                  ) : (
                   <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={reportChartData}>
+                    <BarChart data={chartData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                       <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
                       <YAxis fontSize={12} tickLine={false} axisLine={false} tickFormatter={(v) => `${v}%`} />
@@ -111,10 +120,16 @@ export default function DashboardPage() {
                       <Bar dataKey="conversionRate" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
+                  )}
                 </TabsContent>
                 <TabsContent value="purchases">
+                  {isLoading ? (
+                    <div className="h-[300px] flex items-center justify-center text-muted-foreground text-sm">
+                      로딩 중...
+                    </div>
+                  ) : (
                   <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={reportChartData}>
+                    <BarChart data={chartData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                       <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
                       <YAxis fontSize={12} tickLine={false} axisLine={false} />
@@ -122,10 +137,16 @@ export default function DashboardPage() {
                       <Bar dataKey="purchases" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
+                  )}
                 </TabsContent>
                 <TabsContent value="clicks">
+                  {isLoading ? (
+                    <div className="h-[300px] flex items-center justify-center text-muted-foreground text-sm">
+                      로딩 중...
+                    </div>
+                  ) : (
                   <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={reportChartData}>
+                    <BarChart data={chartData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                       <XAxis dataKey="name" fontSize={12} tickLine={false} axisLine={false} />
                       <YAxis fontSize={12} tickLine={false} axisLine={false} />
@@ -133,6 +154,7 @@ export default function DashboardPage() {
                       <Bar dataKey="clicks" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
+                  )}
                 </TabsContent>
               </Tabs>
             </CardContent>
