@@ -34,7 +34,7 @@
 **Phase 9 진행 중** - UI 컴포넌트 분리
 
 ### Phase 9-1: 도메인별 UI 분리 진행
-- 🔄 products: ProductCard, ProductSearchHeader, ProductCategoryFilter, ProductGrid, ProductPagination, ProductBreadcrumb, ProductImageDisplay, ProductDetailInfo (8개 생성, 페이지 리팩토링 미완)
+- ✅ products: ProductCard, ProductSearchHeader, ProductCategoryFilter, ProductGrid, ProductPagination, ProductBreadcrumb, ProductImageDisplay, ProductDetailInfo (8개)
 - ⏸️ dashboard: 대기
 - ⏸️ links: 대기
 - ⏸️ receipt: 대기
