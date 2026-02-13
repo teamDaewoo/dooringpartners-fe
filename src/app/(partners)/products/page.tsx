@@ -9,28 +9,30 @@ import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import type { Product, ProductCategory } from "@/types/product";
-import { categories, products } from "@/data/mockData";
+import type { Product } from "@/types/product";
+import { useProducts } from "@/hooks/product/useProducts";
 
 function formatKRW(value: number) {
   return `₩${value.toLocaleString("ko-KR")}`;
 }
 
 function ProductSearchPageContent() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("전체");
   const [includeIssued, setIncludeIssued] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 6;
 
-  const filtered = products.filter((p) => {
-    const matchCategory = selectedCategory === "전체" || p.category === selectedCategory;
-    const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchCategory && matchSearch;
-  });
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
-  const paginated = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
+  // React Query Hook 사용
+  const {
+    products,
+    categories,
+    total,
+    isLoading,
+    searchQuery,
+    selectedCategory,
+    currentPage,
+    totalPages,
+    setSearchQuery,
+    setSelectedCategory,
+    setCurrentPage,
+  } = useProducts({ perPage: 6 });
 
   return (
     <>
@@ -44,7 +46,7 @@ function ProductSearchPageContent() {
             <Input
               placeholder="상품명을 검색하세요..."
               value={searchQuery}
-              onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9 text-sm"
             />
           </div>
@@ -55,7 +57,7 @@ function ProductSearchPageContent() {
           {/* Sidebar - Categories */}
           <div className="w-48 shrink-0">
             <h3 className="text-sm font-semibold mb-3">카테고리</h3>
-            <RadioGroup value={selectedCategory} onValueChange={(v) => { setSelectedCategory(v); setCurrentPage(1); }}>
+            <RadioGroup value={selectedCategory} onValueChange={setSelectedCategory}>
               {categories.map((cat) => (
                 <div key={cat} className="flex items-center gap-2 py-1">
                   <RadioGroupItem value={cat} id={`cat-${cat}`} />
@@ -68,23 +70,29 @@ function ProductSearchPageContent() {
           {/* Product Grid */}
           <div className="flex-1">
             <div className="flex items-center justify-between mb-4">
-              <p className="text-sm text-muted-foreground">검색결과 <span className="font-medium text-foreground">{filtered.length}</span>개</p>
+              <p className="text-sm text-muted-foreground">검색결과 <span className="font-medium text-foreground">{total}</span>개</p>
               <div className="flex items-center gap-2">
                 <Label htmlFor="include-issued" className="text-xs text-muted-foreground">발급된 링크 포함</Label>
                 <Switch id="include-issued" checked={includeIssued} onCheckedChange={setIncludeIssued} />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {paginated.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
+            {isLoading ? (
+              <div className="text-center py-16 text-muted-foreground text-sm">로딩 중...</div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {products.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
 
-            {filtered.length === 0 && (
-              <div className="text-center py-16 text-muted-foreground text-sm">
-                검색 결과가 없습니다.
-              </div>
+                {products.length === 0 && (
+                  <div className="text-center py-16 text-muted-foreground text-sm">
+                    검색 결과가 없습니다.
+                  </div>
+                )}
+              </>
             )}
 
             {/* Pagination */}
