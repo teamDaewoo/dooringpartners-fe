@@ -1,0 +1,29 @@
+name: Mirror to Private Repo
+
+on:
+  push:
+    branches:
+      - main  # 메인 브랜치명 확인
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.MIRROR_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Push to private mirror
+        run: |
+          git remote add mirror git@github.com:teamdaewu-do-ring/do-ring-frontend.git
+          git push mirror main --force
