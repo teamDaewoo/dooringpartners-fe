@@ -39,7 +39,7 @@
 - ✅ links: LinkHeader, LinkFilters, LinkTable, LinkTableRow (4개)
 - ✅ receipt: MonthSelector, SettlementKPIs, SettlementInfoBox, SettlementActions, SettlementTable (5개)
 - ✅ notice: NoticeHeader, NoticeSearch, NoticeFilterTabs, NoticeTable (4개)
-- ⏸️ qna: 대기
+- ✅ qna: QnAHeader, QnASearch, QnATabs, QnAAccordion, QnAEmptyState (5개)
 - ⏸️ guide: 대기
 
 ---
