@@ -37,7 +37,7 @@
 - ✅ products: ProductCard, ProductSearchHeader, ProductCategoryFilter, ProductGrid, ProductPagination, ProductBreadcrumb, ProductImageDisplay, ProductDetailInfo (8개)
 - ✅ dashboard: DashboardHeader, DashboardSearchBar, DateChips, DashboardKPIs, DashboardChart (5개)
 - ✅ links: LinkHeader, LinkFilters, LinkTable, LinkTableRow (4개)
-- ⏸️ receipt: 대기
+- ✅ receipt: MonthSelector, SettlementKPIs, SettlementInfoBox, SettlementActions, SettlementTable (5개)
 - ⏸️ notice: 대기
 - ⏸️ qna: 대기
 - ⏸️ guide: 대기
