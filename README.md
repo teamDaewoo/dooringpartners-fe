@@ -1,5 +1,5 @@
 # Welcome to your Lovable project
-
+안녕 진호게이야
 ## Project info
 
 **URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
