@@ -22,6 +22,7 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      {/*  미러링 테스트 배너 */}  <div style={{  position: 'fixed',  top: 0,  left: 0,  right: 0,  background: '#22C55E',  color: 'white',  padding: '12px',  textAlign: 'center',  zIndex: 99999,  fontSize: '18px',  fontWeight: 'bold',  boxShadow: '0 2px 8px rgba(0,0,0,0.2)'  }}>   미러링 & 자동 배포 테스트 완료! - {new Date().toLocaleTimeString('ko-KR')}  </div>
       <Toaster />
       <Sonner />
       <AuthProvider>
