@@ -21,7 +21,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.replace("/report");
+      router.replace("/dashboard");
     }
   }, [isAuthenticated, router]);
 
@@ -38,7 +38,7 @@ export default function LoginPage() {
     setLoading(false);
 
     if (result.success) {
-      router.replace("/report");
+      router.replace("/dashboard");
     } else {
       setError(result.error || "로그인에 실패했습니다.");
     }

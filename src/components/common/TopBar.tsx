@@ -97,7 +97,7 @@ export default function TopBar() {
     <header className="h-[45px] border-b border-border bg-background sticky top-0 z-50">
       <div className="h-full max-w-7xl mx-auto px-4 flex items-center justify-between">
         {/* Branding */}
-        <Link href="/report" className="flex items-center gap-2">
+        <Link href="/dashboard" className="flex items-center gap-2">
           <Image
             src="/dooring-logo.png"
             alt="두링파트너스"
