@@ -38,7 +38,7 @@
 - ✅ dashboard: DashboardHeader, DashboardSearchBar, DateChips, DashboardKPIs, DashboardChart (5개)
 - ✅ links: LinkHeader, LinkFilters, LinkTable, LinkTableRow (4개)
 - ✅ receipt: MonthSelector, SettlementKPIs, SettlementInfoBox, SettlementActions, SettlementTable (5개)
-- ⏸️ notice: 대기
+- ✅ notice: NoticeHeader, NoticeSearch, NoticeFilterTabs, NoticeTable (4개)
 - ⏸️ qna: 대기
 - ⏸️ guide: 대기
 
