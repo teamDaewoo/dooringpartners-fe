@@ -6,7 +6,7 @@ import { ArrowLeft, ChevronRight, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { products } from "@/data/mockData";
+import { useProduct } from "@/hooks/product/useProduct";
 
 function formatKRW(value: number) {
   return `₩${value.toLocaleString("ko-KR")}`;
@@ -21,18 +21,26 @@ const commissionHistory = [
 function ProductDetailPageContent() {
   const { id } = useParams();
   const { toast } = useToast();
-  const product = products.find((p) => p.id === Number(id));
+
+  // React Query Hook 사용
+  const { product, isLoading, error } = useProduct(id as string);
+
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-16 text-center">
+        <p className="text-muted-foreground">로딩 중...</p>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
-      <>
-        <div className="max-w-7xl mx-auto px-4 py-16 text-center">
-          <p className="text-muted-foreground">상품을 찾을 수 없습니다.</p>
-          <Link href="/products" className="text-accent hover:underline text-sm mt-2 inline-block">
-            상품 목록으로 돌아가기
-          </Link>
-        </div>
-      </>
+      <div className="max-w-7xl mx-auto px-4 py-16 text-center">
+        <p className="text-muted-foreground">상품을 찾을 수 없습니다.</p>
+        <Link href="/products" className="text-accent hover:underline text-sm mt-2 inline-block">
+          상품 목록으로 돌아가기
+        </Link>
+      </div>
     );
   }
 

@@ -127,7 +127,7 @@ function ProductSearchPageContent() {
 function ProductCard({ product }: { product: Product }) {
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer group">
-      <Link href={`/product/${product.id}`}>
+      <Link href={`/products/${product.id}`}>
         {/* Image placeholder */}
         <div className="aspect-[4/3] bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
           <span className="text-muted-foreground text-xs">상품 이미지</span>

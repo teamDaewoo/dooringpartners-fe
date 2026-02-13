@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Image as ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGuide } from "@/hooks/guide/useGuide";
@@ -9,8 +9,18 @@ function UsingGuidePageContent() {
   // React Query Hook 사용
   const { sections, isLoading } = useGuide();
 
-  const [activeSection, setActiveSection] = useState(sections[0]?.id || "");
-  const [activeItem, setActiveItem] = useState(sections[0]?.items[0]?.id || "");
+  const [activeSection, setActiveSection] = useState("");
+  const [activeItem, setActiveItem] = useState("");
+
+  // 데이터 로드 완료 후 초기 상태 설정
+  useEffect(() => {
+    if (sections.length > 0 && !activeSection) {
+      setActiveSection(sections[0].id);
+      if (sections[0].items.length > 0) {
+        setActiveItem(sections[0].items[0].id);
+      }
+    }
+  }, [sections, activeSection]);
 
   const currentSection = sections.find((s) => s.id === activeSection);
   const currentItem = currentSection?.items.find((i) => i.id === activeItem);
