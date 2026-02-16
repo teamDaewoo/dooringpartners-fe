@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/common/NavLink";
 import { useAuth } from "@/auth/AuthContext";
+import { useTopbarStore } from "@/store/topbarStore";
 
 interface DropdownItem {
   label: string;
@@ -85,7 +86,7 @@ function DropdownMenu({
 export default function TopBar() {
   const pathname = usePathname();
   const { logout } = useAuth();
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const { openDropdown, setOpenDropdown } = useTopbarStore();
 
   const isActive = (item: NavItem) => {
     if (item.href) return pathname === item.href;
