@@ -1,8 +1,11 @@
 'use client';
 
 import { useEffect, type ReactNode } from 'react';
+import axios from 'axios';
 import { useAuthStore } from '@/auth/store/useAuthStore';
-import { httpClient } from '@/api/httpClient';
+import type { UserType } from '@/auth/types';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 // AuthProvider: Silent Refresh 처리
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -16,10 +19,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     // Silent Refresh: RT 쿠키로 AT 복원 시도
+    // 인터셉터 없는 순수 axios 사용 (httpClient 사용 시 401 → 재시도 루프 발생)
     const silentRefresh = async () => {
       try {
-        // 크리에이터 전용 앱이므로 creator refresh 엔드포인트 사용
-        const response = await httpClient.post('/api/auth/creator/refresh');
+        const response = await axios.post(
+          `${API_URL}/api/auth/creator/refresh`,
+          {},
+          { withCredentials: true }
+        );
 
         if (response.data.success && response.data.data?.accessToken) {
           const token = response.data.data.accessToken;
@@ -27,13 +34,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // JWT 디코딩
           const payload = JSON.parse(atob(token.split('.')[1]));
           const userId = parseInt(payload.sub, 10);
-          const userType = payload.type;
+          const userType = payload.type?.toLowerCase() as UserType;
           const status = payload.status;
 
           setAuth(token, userId, userType, status);
         }
-      } catch (error) {
-        // RT가 없거나 만료된 경우 → 로그인 필요
+      } catch {
+        // RT가 없거나 만료된 경우 → 로그인 필요 (정상 케이스)
         clearAuth();
       } finally {
         setInitialized();
@@ -43,9 +50,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     silentRefresh();
   }, [isInitialized, accessToken, setAuth, clearAuth, setInitialized]);
 
-  // 초기화 중에는 로딩 표시 (선택)
   if (!isInitialized) {
-    return null; // 또는 <div>Loading...</div>
+    return null;
   }
 
   return <>{children}</>;

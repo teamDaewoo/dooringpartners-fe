@@ -22,8 +22,12 @@ export function useAuth() {
 
   // JWT 디코딩 헬퍼
   const decodeJwt = (token: string): JwtPayload => {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload;
+    } catch {
+      throw new Error('JWT 파싱 실패: 토큰 형식이 올바르지 않습니다.');
+    }
   };
 
   // Seller 로그인

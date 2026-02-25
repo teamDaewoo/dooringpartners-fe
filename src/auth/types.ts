@@ -1,7 +1,7 @@
 // User Types
 export type UserType = 'seller' | 'creator';
 
-export type UserStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'SUSPENDED';
+export type UserStatus = 'PENDING' | 'ACTIVE' | 'SUSPENDED';
 
 // API Request Types
 export interface SignupSellerRequest {
