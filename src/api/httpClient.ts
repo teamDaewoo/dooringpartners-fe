@@ -71,7 +71,7 @@ httpClient.interceptors.response.use(
             const status = payload.status;
 
             // Auth store 업데이트
-            useAuthStore.getState().setAuth(newAccessToken, userId, userType, status);
+            useAuthStore.getState().setAuth(newAccessToken, userId, actualUserType, status);
 
             // 대기 중인 요청들에게 새 토큰 전달
             onRefreshed(newAccessToken);

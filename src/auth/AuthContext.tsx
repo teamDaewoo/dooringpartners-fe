@@ -1,14 +1,12 @@
 'use client';
 
 import { useEffect, type ReactNode } from 'react';
-import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/auth/store/useAuthStore';
 import { httpClient } from '@/api/httpClient';
 
 // AuthProvider: Silent Refresh 처리
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { setAuth, clearAuth, isInitialized, setInitialized, accessToken } = useAuthStore();
-  const pathname = usePathname();
 
   useEffect(() => {
     // 이미 초기화되었거나 AT가 있으면 스킵
