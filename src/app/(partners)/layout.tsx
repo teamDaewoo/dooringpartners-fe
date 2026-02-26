@@ -3,19 +3,21 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import TopBar from "@/components/common/TopBar";
-import { useAuth } from "@/auth/AuthContext";
+import { useAuth } from "@/auth/hooks/useAuth";
+import { useAuthStore } from "@/auth/store/useAuthStore";
 
 export default function PartnersLayout({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isLoggedIn } = useAuth();
+  const isInitialized = useAuthStore((s) => s.isInitialized);
   const router = useRouter();
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    if (isInitialized && !isLoggedIn) {
       router.replace("/login");
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isInitialized, isLoggedIn, router]);
 
-  if (isLoading) {
+  if (!isInitialized) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-muted-foreground">로딩 중...</div>
@@ -23,7 +25,7 @@ export default function PartnersLayout({ children }: { children: React.ReactNode
     );
   }
 
-  if (!isAuthenticated) {
+  if (!isLoggedIn) {
     return null;
   }
 
