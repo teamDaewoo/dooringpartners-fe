@@ -3,7 +3,7 @@
 import { useEffect, type ReactNode } from 'react';
 import axios from 'axios';
 import { useAuthStore } from '@/auth/store/useAuthStore';
-import type { UserType } from '@/auth/types';
+import type { UserType, UserStatus } from '@/auth/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const payload = JSON.parse(atob(token.split('.')[1]));
           const userId = parseInt(payload.sub, 10);
           const userType = payload.type?.toLowerCase() as UserType;
-          const status = payload.status;
+          const status = payload.status?.toLowerCase() as UserStatus;
 
           setAuth(token, userId, userType, status);
         }
