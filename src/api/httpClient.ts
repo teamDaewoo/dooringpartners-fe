@@ -68,7 +68,7 @@ httpClient.interceptors.response.use(
             // JWT 디코딩해서 userId, status 추출
             const payload = JSON.parse(atob(newAccessToken.split('.')[1]));
             const userId = parseInt(payload.sub, 10);
-            const status = payload.status;
+            const status = payload.status?.toLowerCase();
 
             // Auth store 업데이트
             useAuthStore.getState().setAuth(newAccessToken, userId, actualUserType, status);
