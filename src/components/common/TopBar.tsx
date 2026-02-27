@@ -8,7 +8,7 @@ import { ChevronDown, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/common/NavLink";
-import { useAuth } from "@/auth/AuthContext";
+import { useAuth } from "@/auth/hooks/useAuth";
 import { useTopbarStore } from "@/store/topbarStore";
 
 interface DropdownItem {
