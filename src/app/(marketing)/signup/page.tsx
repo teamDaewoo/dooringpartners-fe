@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,37 +9,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
-  const { loginAsCreator, isLoggedIn } = useAuth();
+  const { signupAsCreator } = useAuth();
   const [email, setEmail] = useState("");
+  const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      router.replace("/dashboard");
-    }
-  }, [isLoggedIn, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
-    if (!email || !password) {
-      setError("이메일과 비밀번호를 입력해주세요.");
+    if (!email || !nickname || !password) {
+      setError("모든 항목을 입력해주세요.");
       return;
     }
 
     setIsSubmitting(true);
-    const result = await loginAsCreator({ email, password });
+    const result = await signupAsCreator({ email, nickname, password });
     setIsSubmitting(false);
 
     if (result.success) {
-      router.replace("/dashboard");
+      router.push("/login");
     } else {
-      setError(result.error ?? "로그인에 실패했습니다.");
+      setError(result.error ?? "회원가입에 실패했습니다.");
     }
   };
 
@@ -70,6 +65,17 @@ export default function LoginPage() {
             />
           </div>
           <div className="space-y-1.5">
+            <Label htmlFor="nickname">닉네임</Label>
+            <Input
+              id="nickname"
+              type="text"
+              placeholder="닉네임을 입력해주세요"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              disabled={isSubmitting}
+            />
+          </div>
+          <div className="space-y-1.5">
             <Label htmlFor="password">비밀번호</Label>
             <Input
               id="password"
@@ -84,14 +90,14 @@ export default function LoginPage() {
             <p className="text-sm text-destructive">{error}</p>
           )}
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "로그인 중..." : "로그인"}
+            {isSubmitting ? "가입 중..." : "회원가입"}
           </Button>
         </form>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          아직 계정이 없으신가요?{" "}
-          <Link href="/signup" className="text-foreground hover:underline transition-colors">
-            회원가입
+          이미 계정이 있으신가요?{" "}
+          <Link href="/login" className="text-foreground hover:underline transition-colors">
+            로그인
           </Link>
         </p>
       </div>
