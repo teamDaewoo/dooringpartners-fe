@@ -28,6 +28,11 @@ export default function SignupPage() {
       return;
     }
 
+    if (nickname.length < 2 || nickname.length > 50) {
+      setError("닉네임은 2~50자 이내여야 합니다.");
+      return;
+    }
+
     if (password.length < 8) {
       setError("비밀번호는 8자 이상이어야 합니다.");
       return;
