@@ -33,13 +33,17 @@ export default function LoginPage() {
     }
 
     setIsSubmitting(true);
-    const result = await loginAsCreator({ email, password });
-    setIsSubmitting(false);
-
-    if (result.success) {
-      router.replace("/dashboard");
-    } else {
-      setError(result.error ?? "로그인에 실패했습니다.");
+    try {
+      const result = await loginAsCreator({ email, password });
+      if (result.success) {
+        router.replace("/dashboard");
+      } else {
+        setError(result.error ?? "로그인에 실패했습니다.");
+      }
+    } catch {
+      setError("로그인에 실패했습니다.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
