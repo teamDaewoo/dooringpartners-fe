@@ -6,23 +6,23 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/auth/AuthContext";
+import { useAuth } from "@/auth/hooks/useAuth";
 
 const partnerLogos = [
   "PartnerA", "PartnerB", "PartnerC", "PartnerD", "PartnerE",
 ];
 
 export default function LandingPage() {
-  const { isAuthenticated } = useAuth();
+  const { isLoggedIn } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isLoggedIn) {
       router.replace("/dashboard");
     }
-  }, [isAuthenticated, router]);
+  }, [isLoggedIn, router]);
 
-  if (isAuthenticated) {
+  if (isLoggedIn) {
     return null;
   }
 
