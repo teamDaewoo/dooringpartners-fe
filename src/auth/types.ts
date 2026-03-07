@@ -54,6 +54,27 @@ export interface JwtPayload {
   exp?: number;
 }
 
+// OAuth Types
+export type OAuthProvider = 'kakao' | 'google';
+
+export interface OAuthAuthorizeResponse {
+  authorizationUrl: string;
+}
+
+export interface OAuthCallbackRequest {
+  code: string;
+  state: string;
+}
+
+export interface NicknameRegisterRequest {
+  nickname: string;
+  agreedTerms: boolean;
+}
+
+export interface NicknameCheckResponse {
+  available: boolean;
+}
+
 // Legacy types (기존 코드 호환용)
 export interface User {
   email: string;

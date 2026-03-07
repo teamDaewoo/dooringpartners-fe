@@ -8,11 +8,13 @@ interface AuthState {
   userType: UserType | null;
   status: UserStatus | null;
   isInitialized: boolean;
+  isVerified: boolean;
 
   // Actions
   setAuth: (token: string, userId: number, userType: UserType, status: UserStatus) => void;
   clearAuth: () => void;
   setInitialized: () => void;
+  setVerified: () => void;
 }
 
 export const useAuthStore = create<AuthState>()((set) => ({
@@ -22,6 +24,7 @@ export const useAuthStore = create<AuthState>()((set) => ({
   userType: null,
   status: null,
   isInitialized: false,
+  isVerified: false,
 
   // Actions
   setAuth: (token, userId, userType, status) =>
@@ -38,7 +41,10 @@ export const useAuthStore = create<AuthState>()((set) => ({
       userId: null,
       userType: null,
       status: null,
+      isVerified: false,
     }),
 
   setInitialized: () => set({ isInitialized: true }),
+
+  setVerified: () => set({ isVerified: true }),
 }));
