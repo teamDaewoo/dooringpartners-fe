@@ -56,6 +56,7 @@ export default function LoginPage() {
     try {
       const state = crypto.randomUUID();
       sessionStorage.setItem("oauth_state", state);
+      sessionStorage.setItem("oauth_provider", provider);
 
       const response = await getOAuthAuthorizeUrl(provider, state);
       if (response.success && response.data?.authorizationUrl) {
