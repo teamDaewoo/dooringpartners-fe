@@ -1,27 +1,39 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/auth/hooks/useAuth";
+import { getOAuthAuthorizeUrl } from "@/auth/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { OAuthProvider } from "@/auth/types";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { loginAsCreator, isLoggedIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [socialLoading, setSocialLoading] = useState<OAuthProvider | null>(null);
 
   useEffect(() => {
     if (isLoggedIn) {
       router.replace("/dashboard");
     }
   }, [isLoggedIn, router]);
+
+  useEffect(() => {
+    // 보호된 페이지에서 리다이렉트된 경우 return_to 저장
+    const returnTo = searchParams.get("returnTo");
+    if (returnTo) {
+      sessionStorage.setItem("return_to", returnTo);
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +48,9 @@ export default function LoginPage() {
     try {
       const result = await loginAsCreator({ email, password });
       if (result.success) {
-        router.replace("/dashboard");
+        const returnTo = sessionStorage.getItem("return_to");
+        sessionStorage.removeItem("return_to");
+        router.replace(returnTo ?? "/dashboard");
       } else {
         setError(result.error ?? "로그인에 실패했습니다.");
       }
@@ -46,6 +60,28 @@ export default function LoginPage() {
       setIsSubmitting(false);
     }
   };
+
+  const handleSocialLogin = async (provider: OAuthProvider) => {
+    if (socialLoading) return;
+    setSocialLoading(provider);
+    try {
+      const state = crypto.randomUUID();
+      sessionStorage.setItem("oauth_state", state);
+
+      const response = await getOAuthAuthorizeUrl(provider, state);
+      if (response.success && response.data?.authorizationUrl) {
+        window.location.href = response.data.authorizationUrl;
+      } else {
+        setError("소셜 로그인을 시작할 수 없습니다. 다시 시도해주세요.");
+        setSocialLoading(null);
+      }
+    } catch {
+      setError("소셜 로그인 중 오류가 발생했습니다.");
+      setSocialLoading(null);
+    }
+  };
+
+  const isSocialLoading = socialLoading !== null;
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4">
@@ -70,7 +106,7 @@ export default function LoginPage() {
               placeholder="email@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              disabled={isSubmitting}
+              disabled={isSubmitting || isSocialLoading}
             />
           </div>
           <div className="space-y-1.5">
@@ -81,16 +117,46 @@ export default function LoginPage() {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              disabled={isSubmitting}
+              disabled={isSubmitting || isSocialLoading}
             />
           </div>
           {error && (
             <p className="text-sm text-destructive">{error}</p>
           )}
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
+          <Button type="submit" className="w-full" disabled={isSubmitting || isSocialLoading}>
             {isSubmitting ? "로그인 중..." : "로그인"}
           </Button>
         </form>
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">또는</span>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={() => handleSocialLogin("kakao")}
+            disabled={isSocialLoading}
+          >
+            {socialLoading === "kakao" ? "연결 중..." : "카카오로 로그인"}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={() => handleSocialLogin("google")}
+            disabled={isSocialLoading}
+          >
+            {socialLoading === "google" ? "연결 중..." : "구글로 로그인"}
+          </Button>
+        </div>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           아직 계정이 없으신가요?{" "}
