@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/auth/hooks/useAuth";
@@ -13,7 +13,6 @@ import type { OAuthProvider } from "@/auth/types";
 
 export default function LoginPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { loginAsCreator, isLoggedIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,14 +25,6 @@ export default function LoginPage() {
       router.replace("/dashboard");
     }
   }, [isLoggedIn, router]);
-
-  useEffect(() => {
-    // 보호된 페이지에서 리다이렉트된 경우 return_to 저장
-    const returnTo = searchParams.get("returnTo");
-    if (returnTo) {
-      sessionStorage.setItem("return_to", returnTo);
-    }
-  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,9 +39,7 @@ export default function LoginPage() {
     try {
       const result = await loginAsCreator({ email, password });
       if (result.success) {
-        const returnTo = sessionStorage.getItem("return_to");
-        sessionStorage.removeItem("return_to");
-        router.replace(returnTo ?? "/dashboard");
+        router.replace("/dashboard");
       } else {
         setError(result.error ?? "로그인에 실패했습니다.");
       }
