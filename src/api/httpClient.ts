@@ -43,6 +43,11 @@ httpClient.interceptors.response.use(
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
 
+    // TOKEN_EXPIRED는 tempToken 만료 → refresh 없이 그대로 throw
+    if (error.response?.status === 401 && (error.response.data as any)?.code === 'TOKEN_EXPIRED') {
+      return Promise.reject(error);
+    }
+
     // 401 에러이고, refresh 시도 전이면
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
