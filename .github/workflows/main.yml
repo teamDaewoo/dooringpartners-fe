@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.0
@@ -28,5 +26,8 @@ jobs:
         run: |
           git config user.email "teamdaewu@gmail.com"
           git config user.name "teamdaewu-do-ring"
+          git checkout --orphan mirror-branch
+          git add -A
+          git commit -m "sync: mirror from main repo"
           git remote add mirror git@github.com:teamdaewu-do-ring/do-ring-frontend.git
-          git push mirror main --force
+          git push mirror mirror-branch:main --force
