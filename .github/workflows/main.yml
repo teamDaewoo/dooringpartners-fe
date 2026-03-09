@@ -3,7 +3,7 @@ name: Mirror to Private Repo
 on:
   push:
     branches:
-      - main  # 메인 브랜치명 확인
+      - main
   workflow_dispatch:
 
 jobs:
@@ -16,7 +16,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.MIRROR_PRIVATE_KEY }}
+
+      - name: Add mirror host to known_hosts
+        run: ssh-keyscan github.com >> ~/.ssh/known_hosts
+
       - name: Push to private mirror
         run: |
-          git remote add mirror https://x-access-token:${{ secrets.VERCEL_OWNER_PAT }}@github.com/teamdaewu-do-ring/do-ring-frontend.git
+          git config user.email "teamdaewu@gmail.com"
+          git config user.name "teamdaewu-do-ring"
+          git remote add mirror git@github.com:teamdaewu-do-ring/do-ring-frontend.git
           git push mirror main --force
